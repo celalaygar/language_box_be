@@ -1,0 +1,55 @@
+# Bildirim Oluşturma (CREATE)
+# POST http://151.250.237.233:3303/find-word-v1/api/v1/notifications
+
+curl -X POST 'http://151.250.237.233:3303/find-word-v1/api/v1/notifications' \
+-H 'Content-Type: application/json' \
+-d '{
+    "title": "Yeni Özellik: Kelime Listesi Eklendi",
+    "description": "Artık kendi kelime listelerinizi oluşturabilirsiniz! Hemen deneyin.",
+    "type": "FEATURE_UPDATE"
+}'
+
+
+---------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
+
+# Tüm Bildirimleri Listeleme (READ ALL)
+# GET http://151.250.237.233:3303/find-word-v1/api/v1/notifications
+
+curl -X GET 'http://151.250.237.233:3303/find-word-v1/api/v1/notifications'
+
+
+---------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
+
+# ID Bazlı Bildirim Getirme (READ ONE)
+# GET http://151.250.237.233:3303/find-word-v1/api/v1/notifications/{id}
+
+curl -X GET 'http://151.250.237.233:3303/find-word-v1/api/v1/notifications/[NOTIFICATION_ID]'
+
+
+---------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
+
+# Bildirim Güncelleme (UPDATE)
+# PUT http://151.250.237.233:3303/find-word-v1/api/v1/notifications/{id}
+
+curl -X PUT 'http://151.250.237.233:3303/find-word-v1/api/v1/notifications/[NOTIFICATION_ID]' \
+-H 'Content-Type: application/json' \
+-d '{
+    "title": "Önemli Sistem Bakımı Duyurusu (GÜNCELLENDİ)",
+    "description": "Pazar sabahı 02:00-04:00 arası planlı bakım yapılacaktır.",
+    "type": "SYSTEM_MAINTENANCE"
+}'
+
+---------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
+
+# Bildirim Silme (DELETE)
+# DELETE http://151.250.237.233:3303/find-word-v1/api/v1/notifications/{id}
+
+curl -X DELETE 'http://151.250.237.233:3303/find-word-v1/api/v1/notifications/[NOTIFICATION_ID]'

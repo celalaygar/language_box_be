@@ -1,0 +1,80 @@
+
+server:
+  port: ${SERVER_PORT}
+
+
+apple:
+  auth:
+    jwks-uri: "https://appleid.apple.com/auth/keys"
+    issuer: "https://appleid.apple.com"
+
+
+spring:
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+  application:
+    name: find.word.v1
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: "GOOGLE_CLIENT_ID"
+            client-secret: "GOOGLE_CLIENT_SECRET"
+            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - openid
+              - profile
+              - email
+          apple:
+            client-id: "APPLE_CLIENT_ID"
+            client-secret: "APPLE_CLIENT_SECRET"
+            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - openid
+              - name
+              - email
+        provider:
+          apple:
+            issuer-uri: https://appleid.apple.com # This line is required to provide the provider ID
+            authorization-uri: https://appleid.apple.com/auth/authorize
+            token-uri: https://appleid.apple.com/auth/token
+            jwk-set-uri: https://appleid.apple.com/auth/keys
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.data.mongodb.core: ERROR
+
+jwt:
+  secret: ${JWT_SECRET}
+  invitation-secret: ${INVITATION_SECRET}
+  expiredDay: ${JWT_EXPIRED_DAY}
+
+
+ascendant:
+  url: ${FORTUNE_APP_PY_URL}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui
+    url: /find-word-v1/v3/api-docs   # Swagger UI’nin bağlanacağı API Docs URL
+    swagger-ui-config:
+      deepLinking: true
+
+
+app:
+  scrambled-word:
+    default-count: 2
+  sentence:
+    default-count: 20
+  keyword-quiz:
+    default-count: 5
+  words:
+    default-count: 30
+  grid-challange:
+    default-count: 1

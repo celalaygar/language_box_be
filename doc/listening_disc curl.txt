@@ -1,0 +1,83 @@
+
+Cümle oluşturma endpointi
+--------------------------------------------------------------------------------------------
+curl --location 'http://151.250.237.233:3303/find-word-v1/api/v1/listening_disc/today' \
+--header 'Content-Type: application/json' \
+--data '{
+  "level": "B2",
+  "language": "EN"
+}'
+
+Response Örneği -----------------------------------------
+
+
+[
+    {
+        "id": "68ed3fcd2bec9e28806e13a2",
+        "correctSentence": "She wanted to see the sea.",
+        "similarOptions": [
+            "She wanted to see the sea.",
+            "She wanted to see the see.",
+            "She wanted to see the C."
+        ],
+        "focusWords": [
+            "sea",
+            "see",
+            "C"
+        ],
+        "createdAt": "2025-10-13T21:46:16.336303149",
+        "level": "B2",
+        "language": "EN"
+    },
+    {
+        "id": "68ed46dfb880e21547c9e6c1",
+        "correctSentence": "The weight of the package was excessive.",
+        "similarOptions": [
+            "The weight of the package was excessive.",
+            "The wait of the package was excessive.",
+            "The wate of the package was excessive."
+        ],
+        "focusWords": [
+            "weight",
+            "wait",
+            "wate"
+        ],
+        "createdAt": "2025-10-13T21:46:16.336317743",
+        "level": "B2",
+        "language": "EN"
+    },
+    {
+        "id": "68ed46dfb880e21547c9e6bf",
+        "correctSentence": "I need to know if he'll be there.",
+        "similarOptions": [
+            "I need to know if he'll be there.",
+            "I need to know if he'll bee there.",
+            "I need to know if he'll bear there."
+        ],
+        "focusWords": [
+            "be",
+            "bee",
+            "bear"
+        ],
+        "createdAt": "2025-10-13T21:46:16.336323341",
+        "level": "B2",
+        "language": "EN"
+    },
+    {
+        "id": "68ed3fcd2bec9e28806e13a0",
+        "correctSentence": "I need to buy some new shoes.",
+        "similarOptions": [
+            "I need to buy some new shoes.",
+            "I need to buy some new chews.",
+            "I need to buy some new shrews."
+        ],
+        "focusWords": [
+            "shoes",
+            "chews",
+            "shrews"
+        ],
+        "createdAt": "2025-10-13T21:46:16.336328493",
+        "level": "B2",
+        "language": "EN"
+    }
+]

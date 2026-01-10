@@ -1,0 +1,54 @@
+
+Cümle oluşturma endpointi
+--------------------------------------------------------------------------------------------
+curl --location 'http://151.250.237.233:3303/find-word-v1/api/v1/sentence-builder/today' \
+--header 'Content-Type: application/json' \
+--data '{
+  "level": "C2",
+  "language": "PT"
+}'
+
+Response Örneği -----------------------------------------
+
+
+
+[
+    {
+        "id": "68bd765da56264661e48b9cc",
+        "createdAt": "2025-09-07T15:11:09.08",
+        "level": "C2",
+        "language": "PT",
+        "sentence": "Embora a reunião tenha sido cansativa, a discussão foi bastante produtiva.",
+        "mixedWords": [
+            "Embora",
+            "a",
+            "reunião",
+            "sido",
+            "tenha",
+            "a",
+            "bastante",
+            "discussão",
+            "produtiva."
+        ]
+    },
+    {
+        "id": "68bd765da56264661e48b9cd",
+        "createdAt": "2025-09-07T15:11:09.08",
+        "level": "C2",
+        "language": "PT",
+        "sentence": "Considerando o trânsito caótico, cheguei mais cedo ao aeroporto por precaução.",
+        "mixedWords": [
+            "o",
+            "Considerando",
+            "trânsito",
+            "caótico,",
+            "mais",
+            "cheguei",
+            "por",
+            "aeroporto",
+            "ao",
+            "cedo",
+            "precaução."
+        ]
+    }
+]

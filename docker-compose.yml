@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: find.word.v1
+    network_mode: "host"
+    restart: always
+    environment:
+      MONGO_URI: ${MONGO_URI}
+      SERVER_PORT: ${SERVER_PORT}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRED_DAY: ${JWT_EXPIRED_DAY}
+      INVITATION_SECRET: ${INVITATION_SECRET}
+      FORTUNE_APP_PY_URL: ${FORTUNE_APP_PY_URL}
+    ports:
+      - "7103:7103"

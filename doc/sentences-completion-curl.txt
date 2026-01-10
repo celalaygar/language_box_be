@@ -1,0 +1,34 @@
+
+Cümle tamamlama endpointi
+--------------------------------------------------------------------------------------------
+curl --location 'http://151.250.237.233:3303/find-word-v1/api/v1/sentence/today' \
+--header 'Content-Type: application/json' \
+--data '{
+  "level": "C2",
+  "language": "PT"
+}'
+
+Response Örneği -----------------------------------------
+
+
+
+[
+    {
+        "id": "68bd7239e4dcff7596a752a7",
+        "sentence": "Apesar da complexidade da situação, ele manteve a ____ inabalável, transmitindo confiança a todos.",
+        "answer": "serenidade",
+        "shuffledWord": "eerdnadesi",
+        "createdAt": "2025-09-07T14:53:29.057",
+        "level": "C2",
+        "language": "PT"
+    },
+    {
+        "id": "68bd7239e4dcff7596a752a8",
+        "sentence": "Com a aproximação do prazo final, trabalhou ____ para entregar o projeto a tempo.",
+        "answer": "incansavelmente",
+        "shuffledWord": "tenmvaaseieclnn",
+        "createdAt": "2025-09-07T14:53:29.057",
+        "level": "C2",
+        "language": "PT"
+    }
+]

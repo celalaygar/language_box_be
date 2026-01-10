@@ -1,0 +1,94 @@
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+tüm kelimeleri level seviyesinde çekme işlemi ------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+Request Curl ------------------------------------
+curl --location 'http://151.250.237.233:3303/find-word-v1/api/v1/keyword-quiz/today' \
+--header 'Content-Type: application/json' \
+--data '{
+  "level": "A1",
+  "language": "EN"
+}'
+
+RESPONSE ---------------------------------
+[
+    {
+        "id": "68d57c1bc110b18794f36753",
+        "text": "The sun is a big star. It gives us light and warmth. Plants need the sun to grow.",
+        "keywords": [
+            "solar",
+            "bicycle",
+            "notebook",
+            "chair",
+            "guitar"
+        ],
+        "correctKeyword": "solar",
+        "createdAt": "2025-09-25T20:30:03.488",
+        "level": "A1",
+        "language": "EN"
+    },
+    {
+        "id": "68d57c1bc110b18794f36755",
+        "text": "Books tell stories and teach us new things. You can find them in libraries and bookstores. Reading is a great hobby.",
+        "keywords": [
+            "literature",
+            "television",
+            "remote",
+            "lamp",
+            "pillow"
+        ],
+        "correctKeyword": "literature",
+        "createdAt": "2025-09-25T20:30:03.488",
+        "level": "A1",
+        "language": "EN"
+    },
+    {
+        "id": "68d57c1bc110b18794f36752",
+        "text": "Cats are furry animals. They like to sleep and play with toys. Many people keep cats as pets.",
+        "keywords": [
+            "automobile",
+            "feline",
+            "umbrella",
+            "ocean",
+            "happiness"
+        ],
+        "correctKeyword": "feline",
+        "createdAt": "2025-09-25T20:30:03.488",
+        "level": "A1",
+        "language": "EN"
+    },
+    {
+        "id": "68d57c1bc110b18794f36754",
+        "text": "Apples are a healthy fruit. They can be red, green, or yellow. You can eat them raw or in pies.",
+        "keywords": [
+            "computer",
+            "pen",
+            "pear",
+            "desk",
+            "equation"
+        ],
+        "correctKeyword": "pear",
+        "createdAt": "2025-09-25T20:30:03.488",
+        "level": "A1",
+        "language": "EN"
+    },
+    {
+        "id": "68d57c1bc110b18794f36756",
+        "text": "Bikes have two wheels and pedals. People use them to travel short distances. Riding a bike is good exercise.",
+        "keywords": [
+            "cycle",
+            "carrot",
+            "window",
+            "floor",
+            "ceiling"
+        ],
+        "correctKeyword": "cycle",
+        "createdAt": "2025-09-25T20:30:03.488",
+        "level": "A1",
+        "language": "EN"
+    }
+]

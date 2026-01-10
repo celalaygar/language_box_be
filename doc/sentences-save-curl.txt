@@ -1,0 +1,170 @@
+
+Cümle tamamlama endpointi
+--------------------------------------------------------------------------------------------
+[
+    {
+        "id": "68b36b4ca82b9824dc23ac1f",
+        "sentence": "Her disinclination to engage in idle chatter stemmed from a deep-seated ____ of superficiality.",
+        "answer": "distrust",
+        "shuffledWord": "rtutdiss",
+        "createdAt": "2025-08-31T00:21:16.463",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac20",
+        "sentence": "The project, initially conceived as a mere feasibility study, blossomed ____ into a full-blown implementation.",
+        "answer": "subsequently",
+        "shuffledWord": "sleuuntseqyb",
+        "createdAt": "2025-08-31T00:21:16.463",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac21",
+        "sentence": "Despite the team's meticulous planning, unforeseen circumstances introduced an element of ____ into the proceedings.",
+        "answer": "chaos",
+        "shuffledWord": "chaso",
+        "createdAt": "2025-08-31T00:21:16.463",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac22",
+        "sentence": "He navigated the complex web of corporate politics ____, always careful not to offend those in power.",
+        "answer": "deftly",
+        "shuffledWord": "ldeytf",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac23",
+        "sentence": "The politician's carefully constructed image of virtuousness crumbled under the weight of mounting ____.",
+        "answer": "evidence",
+        "shuffledWord": "deneivec",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac24",
+        "sentence": "She argued ____ that stricter environmental regulations were necessary to avert ecological disaster.",
+        "answer": "forcefully",
+        "shuffledWord": "yfelruoflc",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac25",
+        "sentence": "The novel explored the themes of alienation and societal ____ with poignant detail.",
+        "answer": "disillusionment",
+        "shuffledWord": "lmnsleiidsuitno",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac26",
+        "sentence": "He approached the challenging task ____, displaying a remarkable degree of self-assuredness.",
+        "answer": "confidently",
+        "shuffledWord": "lcnniotfeyd",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac27",
+        "sentence": "The academic paper presented a compelling ____ for the adoption of a new methodology.",
+        "answer": "rationale",
+        "shuffledWord": "eotaairln",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac28",
+        "sentence": "The artist rendered the landscape ____, capturing the subtle nuances of light and shadow.",
+        "answer": "exquisitely",
+        "shuffledWord": "leusexiytqi",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac29",
+        "sentence": "The unexpected turn of events introduced a palpable sense of ____ into the room.",
+        "answer": "tension",
+        "shuffledWord": "snioten",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac2a",
+        "sentence": "The antique clock ticked ____, a constant reminder of the passage of time.",
+        "answer": "rhythmically",
+        "shuffledWord": "tlyayrmihlch",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac2b",
+        "sentence": "The negotiator demonstrated remarkable ____ in securing a favorable agreement for both parties.",
+        "answer": "diplomacy",
+        "shuffledWord": "pamdoiylc",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac2c",
+        "sentence": "The suspect evaded police custody ____, disappearing into the crowded marketplace.",
+        "answer": "swiftly",
+        "shuffledWord": "tfswyil",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac2d",
+        "sentence": "Her profound sense of ____ stemmed from a childhood marked by adversity.",
+        "answer": "resilience",
+        "shuffledWord": "eeilisrnce",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac2e",
+        "sentence": "The project proceeded ____, achieving milestones ahead of schedule and under budget.",
+        "answer": "smoothly",
+        "shuffledWord": "mlohtsoy",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac2f",
+        "sentence": "The scientist's groundbreaking research challenged the prevailing ____ in the field.",
+        "answer": "paradigm",
+        "shuffledWord": "amrdagip",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac30",
+        "sentence": "He accepted the criticism ____, recognizing it as a valuable opportunity for growth.",
+        "answer": "gracefully",
+        "shuffledWord": "felrcuygal",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac31",
+        "sentence": "The widespread ____ regarding the efficacy of the new drug fueled public debate.",
+        "answer": "skepticism",
+        "shuffledWord": "istscpikme",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    },
+    {
+        "id": "68b36b4ca82b9824dc23ac32",
+        "sentence": "She spoke ____ about her experiences, captivating the audience with her vivid storytelling.",
+        "answer": "eloquently",
+        "shuffledWord": "nlyeeqluto",
+        "createdAt": "2025-08-31T00:21:16.464",
+        "level": "C2"
+    }
+]
+
+Response Örneği -----------------------------------------
+
+
+Sentences saved successfully!

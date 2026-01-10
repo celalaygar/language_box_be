@@ -1,0 +1,78 @@
+server:
+  port: 8080
+
+apple:
+  auth:
+    jwks-uri: "https://appleid.apple.com/auth/keys"
+    issuer: "https://appleid.apple.com"
+
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://root11:371root1124@localhost:27017/find_word?authSource=admin
+  application:
+    name: find.word.v1
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: "GOOGLE_CLIENT_ID"
+            client-secret: "GOOGLE_CLIENT_SECRET"
+            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - openid
+              - profile
+              - email
+          apple:
+            client-id: "APPLE_CLIENT_ID"
+            client-secret: "APPLE_CLIENT_SECRET"
+            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - openid
+              - name
+              - email
+        provider:
+          apple:
+            issuer-uri: https://appleid.apple.com # This line is required to provide the provider ID
+            authorization-uri: https://appleid.apple.com/auth/authorize
+            token-uri: https://appleid.apple.com/auth/token
+            jwk-set-uri: https://appleid.apple.com/auth/keys
+
+logging:
+  level:
+    root: INFO
+    org.springframework.data.mongodb.core: ERROR
+
+ascendant:
+  url: "http://localhost:7102/"
+
+
+jwt:
+  secret: "QWx3YXlzLXNlY3VyZS1hbmQtc3Ryb25nLWtleS1mb3Itam90LTUxMi1zZWN1cml0eS0xMjM0NTY3ODkwMTIzNDU2Nzg5"
+  invitation-secret: "QWx3YXlzLXNlY3VyZS1hbmQtc3Ryb25nLWtleS1mb3Itam90LTUxMi1zZWN1cml0eS0xMjM0NTY3ODkwMTIzNDU2Nzg4"
+  expiredDay: 1286400000
+
+
+
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui
+    url: /v3/api-docs    # UI’nin bağlanacağı API Docs URL
+
+
+app:
+  scrambled-word:
+    default-count: 2
+  sentence:
+    default-count: 20
+  keyword-quiz:
+    default-count: 5
+  words:
+    default-count: 30
+  grid-challange:
+    default-count: 1

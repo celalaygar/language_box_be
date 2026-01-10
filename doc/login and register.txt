@@ -1,0 +1,67 @@
+
+
+
+Login curl----------------------------------------------------------------------
+
+curl --location 'http://151.250.237.233:3303/find-word-v1/api/auth/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email":"aaaaaa@gmail.com",
+    "password":"aaaaaa"
+}'
+
+örnek response ---------------------------------------------------------------------
+
+
+{
+    "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjZWxhbGF5Z2FyQG91dGxvb2suY29tIiwiYXV0aG9yaXRpZXMiOiJST0xFX1VTRVIiLCJpYXQiOjE3NTY2MzIxOTUsImV4cCI6MTc1NzkxODU5NX0.BTGdn4woZUcvFHmJ1KRJqmy87r_ywAWq3EfOzDO9-N18xUp30viSAXsHXxLxgJz1hPW3Qi-1Cy4mvCziyG-z0Q",
+    "user": {
+        "id": "68b3119f64f55b91a06ce17f",
+        "firstname": "Arda",
+        "lastname": "Germiyanoglu",
+        "email": "celalaygar@outlook.com",
+        "birthdate": "1986-02-05T00:00:00.000+00:00"
+    }
+}
+
+
+
+
+
+
+Register Curl ----------------------------------------------------------------------------------
+
+curl --location 'http://151.250.237.233:3303/find-word-v1/api/auth/register' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "firstname": "celalaygar1",
+    "lastname": "xxx",
+    "email": "aaaaaa@gmail.com",
+    "password": "aaaaaa",
+    "birthdate": "1986-02-05T00:00:00.000Z"
+}'
+
+
+Response Örneği----------------------------------------------------------------------------------
+
+{
+    "id": "68b4157cc3c7356cfc6e9aa5",
+    "firstname": "celalaygar1",
+    "lastname": "xxx",
+    "birthdate": "1986-02-05T00:00:00.000+00:00",
+    "email": "celalaygar1@outlook.com",
+    "password": "$2a$10$9DXL.8bW5/kxtNlQCCJwv.Jq70N15a3YVNTLSdEXXLSYKCewQCDcq",
+    "role": "USER",
+    "enabled": true,
+    "accountNonLocked": true,
+    "username": "celalaygar1@outlook.com",
+    "authorities": [
+        {
+            "authority": "ROLE_USER"
+        }
+    ],
+    "credentialsNonExpired": true,
+    "accountNonExpired": true
+}
+
+
