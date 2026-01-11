@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -35,7 +36,7 @@ public class GeminiService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     // Veritabanından yüklenecek olan API anahtarları listesi
-    private List<String> apiKeys;
+    private List<String> apiKeys = new ArrayList<>();
     // Güvenli sayaç kullanımı için AtomicInteger
     private final AtomicInteger currentApiKeyIndex = new AtomicInteger(0);
 
