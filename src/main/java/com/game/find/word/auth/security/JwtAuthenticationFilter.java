@@ -33,6 +33,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
 
+        // İsteğin hangi URL'ye geldiğini al
+        String requestURI = request.getRequestURI();
+
+        // İsteğin hangi metodla geldiğini al (GET, POST, PUT vb.)
+        String method = request.getMethod();
+
+        // Terminale yazdır
+        System.out.println(">>> Gelen İstek: " + method + " " + requestURI);
+
+
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String email;
