@@ -19,4 +19,6 @@ public class SentenceBuildGameDto {
     @JsonProperty("mixedWords")
     private List<String> mixedWords;
 
+    private Long sequenceNumber;
+
 }

@@ -24,8 +24,8 @@ public class VoiceMatch {
     private String correctSentence;
     private List<String> similarOptions;
     private List<String> focusWords;
-
     private LocalDateTime createdAt;
     private EnglishLevel level;
     private Language language;
+    private Long sequenceNumber;
 }

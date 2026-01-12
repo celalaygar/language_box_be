@@ -26,4 +26,5 @@ public class Words {
     private EnglishLevel level;
     private LocalDateTime createdAt;
     private Language language;
+    private Long sequenceNumber;
 }

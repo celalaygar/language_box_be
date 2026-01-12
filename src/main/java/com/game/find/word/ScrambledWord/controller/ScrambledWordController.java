@@ -39,32 +39,6 @@ public class ScrambledWordController {
         return Arrays.asList(EnglishLevel.values());
     }
 
-    @PostMapping("/list-by-level")
-    @Operation(
-            summary = "Get all words by level",
-            description = "Returns all words for the given English level as a single page response",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Successful retrieval")
-            }
-    )
-    public ScrambledWord getWordsByLevel(@RequestBody WordPageRequestDto request) {
-        return scrambledWordService.getRandomScrambledWords(request.getLanguage(), request.getLevel(), request.getCount());
-    }
-
-    @PostMapping("/today")
-    @Operation(
-            summary = "Get all words by level",
-            description = "Returns all words for the given English level as a single page response",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Successful retrieval")
-            }
-    )
-    public ScrambledWordResponseDto getTodayWords(@RequestBody WordPageRequestDto request) {
-        return service.getRandomScrambledWords(request.getLanguage(), request.getLevel(), request.getCount());
-    }
-
-
-
     @PostMapping("/findAll")
     @Operation(
             summary = "Get all words by level",
@@ -76,8 +50,6 @@ public class ScrambledWordController {
     public Set<String> findAll(@RequestBody WordPageRequestDto request) {
         return service.findAll(request.getLanguage(), request.getLevel());
     }
-
-
 
     @PostMapping("/saveWords")
     @Operation(
@@ -91,6 +63,28 @@ public class ScrambledWordController {
         return service.saveWords();
     }
 
+    @GetMapping("/reindexAllWords")
+    @Operation(
+            summary = "Get all words by level",
+            description = "Returns all words for the given English level as a single page response",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful retrieval")
+            }
+    )
+    public Boolean reindexAllWords() {
+        return service.reindexAllWords();
+    }
 
-
+    @PostMapping("/getAllBySequenceNumber")
+    @Operation(
+            summary = "Get all words by level",
+            description = "Returns all words for the given English level as a single page response",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful retrieval")
+            }
+    )
+    public List<Words> getAllBySequenceNumber(@RequestBody WordPageRequestDto request) {
+        return service.getAllBySequenceNumber(request.getSequenceNumber(),
+                request.getLanguage(), request.getLevel());
+    }
 }

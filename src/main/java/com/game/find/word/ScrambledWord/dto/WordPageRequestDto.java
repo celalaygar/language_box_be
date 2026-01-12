@@ -31,4 +31,5 @@ public class WordPageRequestDto {
     private Integer count;
 
     Set<String> wordsList;
+    private Long sequenceNumber;
 }

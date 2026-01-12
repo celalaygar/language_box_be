@@ -11,6 +11,7 @@ import com.game.find.word.base.model.Language;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
@@ -20,14 +21,15 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sample;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 @Service
 @RequiredArgsConstructor
@@ -40,12 +42,59 @@ public class WordsService {
     private final WordsRepository repository;
     private final MongoTemplate mongoTemplate;
 
+
+    /**
+     * Belirli bir başlangıç sequenceNumber'ından itibaren
+     * defaultCount kadar kelimeyi liste olarak döner.
+     */
+    public List<Words> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
+        log.info("Fetching words starting from sequence: {}, language: {}, level: {}", sequenceNumber, language, level);
+
+        // Limit belirlemek için PageRequest kullanıyoruz (0. sayfa, defaultCount kadar kayıt)
+        Pageable limit = PageRequest.of(0, defaultCount);
+
+        return repository.findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
+                language,
+                level,
+                sequenceNumber,
+                limit
+        );
+    }
+
+    public Boolean reindexAllWords() {
+        try {
+            log.info("Starting to re-index sequence numbers for all words...");
+
+            for (Language lang : Language.values()) {
+                for (EnglishLevel lvl : EnglishLevel.values()) {
+
+                    List<Words> wordsList = repository.findByLanguageAndLevel(lang, lvl);
+
+                    if (!wordsList.isEmpty()) {
+                        wordsList.sort(Comparator.comparing(Words::getSequenceNumber,
+                                Comparator.nullsLast(Comparator.naturalOrder())));
+
+                        long counter = 1;
+                        for (Words word : wordsList) {
+                            word.setSequenceNumber(counter++);
+                        }
+
+                        repository.saveAll(wordsList);
+                        log.info("Re-indexed {} words for Language: {} and Level: {}", wordsList.size(), lang, lvl);
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            log.error("Error occurred while re-indexing words: ", e);
+            return false;
+        }
+    }
+
     public String saveWords() {
         for (Language language : Language.values()) {
             for (EnglishLevel level : EnglishLevel.values()) {
 
-                // 👇 ESKİSİ: List<ScrambledWord> list = scrambledWordRepository.findByLanguageAndLevelAndIsRead(language, level, false);
-                // 👇 YENİSİ: Yeni metot, 'read' alanı false veya null olan ve 'words' listesi dolu olanları getirir.
                 List<ScrambledWord> list = scrambledWordRepository
                         .findUnreadAndNonEmptyWordsByLanguageAndLevel(language, level);
 
@@ -96,35 +145,6 @@ public class WordsService {
         return "ok";
     }
 
-    public ScrambledWordResponseDto getRandomScrambledWords(Language language, EnglishLevel level, Integer count) {
-        if (count == null || count <= 0) {
-            count = defaultCount;
-        }
-        MatchOperation matchStage = match(
-                org.springframework.data.mongodb.core.query.Criteria
-                        .where("language").is(language)
-                        .and("level").is(level)
-        );
-
-        // 2. Sample -> rastgele count kadar veri çek
-        SampleOperation sampleStage = sample(count);
-
-        // 3. Aggregation -> pipeline birleştir
-        Aggregation aggregation = Aggregation.newAggregation(matchStage, sampleStage);
-        List<Words> list = mongoTemplate.aggregate(aggregation, "words", Words.class).getMappedResults();
-        ScrambledWordResponseDto response = new ScrambledWordResponseDto();
-
-        if (!CollectionUtils.isEmpty(list)) {
-            response.setLevel(level);
-            response.setId(list.get(0).getId());
-            response.setLanguage(language);
-            response.setWords(list);
-            response.setCreatedAt(list.get(0).getCreatedAt());
-            response.setCount(list.size());
-        }
-        return response;
-    }
-
     public String shuffleWord(String word) {
         List<Character> characters = word.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
         Collections.shuffle(characters);
@@ -140,9 +160,4 @@ public class WordsService {
         return response;
     }
 
-    public List<Words> getAll() {
-
-        List<Words> list = repository.findAll();
-        return list;
-    }
 }

@@ -29,6 +29,7 @@ public class SentenceBuildGame {
     private LocalDateTime createdAt;
     private EnglishLevel level;
     private Language language;
+    private Long sequenceNumber;
 
 
     public SentenceBuildGame(SentenceBuildGameDto dto,EnglishLevel level){
@@ -36,6 +37,7 @@ public class SentenceBuildGame {
         this.mixedWords = dto.getMixedWords();
         this.level = level;
         this.createdAt = LocalDateTime.now();
+        this.sequenceNumber = dto.getSequenceNumber();
     }
 
 }

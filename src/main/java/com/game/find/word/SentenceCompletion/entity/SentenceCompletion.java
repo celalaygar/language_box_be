@@ -26,5 +26,6 @@ public class SentenceCompletion {
     private EnglishLevel level;
     private Language language;
     private String hint;
+    private Long sequenceNumber;
 
 }
