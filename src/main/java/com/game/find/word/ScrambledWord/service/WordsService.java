@@ -90,59 +90,41 @@ public class WordsService {
             return false;
         }
     }
+    /**
+     * Listeyi kontrol ederek (Duplicate Check) toplu kayıt yapar.
+     * sequenceNumber alanını boş bırakır.
+     * @param wordsList Kaydedilmek istenen kelime listesi
+     * @return Başarıyla kaydedilen kelime sayısı
+     */
+    public Integer bulkSaveWords(List<Words> wordsList) {
+        log.info("Starting bulk save for {} words", wordsList.size());
 
-    public String saveWords() {
-        for (Language language : Language.values()) {
-            for (EnglishLevel level : EnglishLevel.values()) {
+        // 1. Veritabanında olmayan (unique) kelimeleri filtrele
+        List<Words> wordsToSave = wordsList.stream()
+                .filter(w -> !repository.existsByWordAndLanguageAndLevel(
+                        w.getWord(),
+                        w.getLanguage(),
+                        w.getLevel()))
+                .peek(w -> {
+                    // sequenceNumber'ı garanti altına almak için null set ediyoruz
+                    w.setSequenceNumber(null);
+                    // Oluşturulma tarihini set et (Eğer modelde @CreatedDate yoksa)
+                    if (w.getCreatedAt() == null) {
+                        w.setCreatedAt(LocalDateTime.now());
+                    }
+                })
+                .toList();
 
-                List<ScrambledWord> list = scrambledWordRepository
-                        .findUnreadAndNonEmptyWordsByLanguageAndLevel(language, level);
-
-                List<Word> wordsList = list.stream()
-                        .flatMap(scrambled -> scrambled.getWords().stream())
-                        .map(word -> {
-                            // Word içindeki Hint kontrolü doğru, sadece null ise (değere sahip değilse) boş değer atar.
-                            if (ObjectUtils.isEmpty(word.getHint())) {
-                                word.setHint("____");
-                            }
-                            return word;
-                        })
-                        .toList();
-
-
-                Set<String> setList = wordsList.stream()
-                        .map(item -> item.getWord()).collect(Collectors.toSet());
-
-                // ... mevcut kelimeleri kontrol edip yeni kelimeleri oluşturan ve kaydeden kısım ...
-                List<Words> wordslist = setList.stream()
-                        .map(item -> {
-                            if (repository.findByWordAndLanguageAndLevel(item, language, level).isEmpty()) {
-                                return Words.builder()
-                                        .level(level)
-                                        .language(language)
-                                        .word(item)
-                                        .shuffledWord(shuffleWord(item))
-                                        .createdAt(LocalDateTime.now())
-                                        .hint("____")
-                                        .build();
-                            }
-                            return null; // zaten varsa null döndür
-                        })
-                        .filter(Objects::nonNull) // null olanları filtrele
-                        .collect(Collectors.toList());
-
-                if (!wordslist.isEmpty()) {
-                    repository.saveAll(wordslist);
-                }
-
-                if (!list.isEmpty()) {
-                    list.forEach(scrambledWord -> scrambledWord.setRead(true));
-
-                    scrambledWordRepository.saveAll(list);
-                }
-            }
+        if (wordsToSave.isEmpty()) {
+            log.warn("No new unique words found to save.");
+            return 0;
         }
-        return "ok";
+
+        // 2. Toplu kaydet
+        List<Words> savedWords = repository.saveAll(wordsToSave);
+        log.info("Successfully saved {} new words.", savedWords.size());
+
+        return savedWords.size();
     }
 
     public String shuffleWord(String word) {

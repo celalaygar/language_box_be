@@ -1,10 +1,14 @@
 package com.game.find.word.ScrambledWord.controller;
 
 
+import com.game.find.word.ScrambledWord.entity.Words;
+import com.game.find.word.ScrambledWord.service.WordsService;
 import com.game.find.word.base.util.ApiPaths;
 import com.game.find.word.ScrambledWord.dto.ScrambledWordDto;
 import com.game.find.word.ScrambledWord.entity.ScrambledWord;
 import com.game.find.word.ScrambledWord.service.ScrambledWordService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,19 +19,29 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScrambledWordAdminController {
 
-    private final ScrambledWordService wordService;
+    private final WordsService service;
 
-    // 🔹 Toplu kayıt
-    @PostMapping("/bulk")
-    public ScrambledWord saveWordsBulk(@RequestBody ScrambledWordDto requestDtos) {
-        return wordService.saveWordsBulk(requestDtos);
+    @PostMapping("/bulkSaveWords")
+    @Operation(
+            summary = "Get all words by level",
+            description = "Returns all words for the given English level as a single page response",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful retrieval")
+            }
+    )
+    public Integer bulkSaveWords(@RequestBody List<Words> wordsList) {
+        return service.bulkSaveWords(wordsList);
     }
 
-    // 🔹 Toplu kayıt
-    @GetMapping("/findAll")
-    public List<ScrambledWord> findAll() {
-        return wordService.findAll();
+    @GetMapping("/reindexAllWords")
+    @Operation(
+            summary = "Get all words by level",
+            description = "Returns all words for the given English level as a single page response",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful retrieval")
+            }
+    )
+    public Boolean reindexAllWords() {
+        return service.reindexAllWords();
     }
-
-
 }

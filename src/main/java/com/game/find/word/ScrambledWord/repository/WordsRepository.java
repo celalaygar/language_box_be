@@ -14,7 +14,7 @@ public interface WordsRepository extends MongoRepository<Words, String> {
     List<Words> findByWordAndLanguageAndLevel(String word,Language language, EnglishLevel level);
 
     List<Words> findByLanguageAndLevel( Language language, EnglishLevel level);
-
+    boolean existsByWordAndLanguageAndLevel(String word, Language language, EnglishLevel level);
     // sequenceNumber >= startSeq kriterine uyan,
     // dile ve seviyeye göre filtrelenmiş verileri getirir.
     List<Words> findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
