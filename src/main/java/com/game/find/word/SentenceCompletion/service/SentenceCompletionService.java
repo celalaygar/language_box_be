@@ -8,9 +8,12 @@ import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
 import com.game.find.word.base.model.Language;
 import com.game.find.word.googleAI.service.GeminiService;
 import com.game.find.word.googleAI.utils.WordShuffler;
+import com.game.find.word.sentenceBuilder.entity.SentenceBuildGame;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
@@ -36,6 +39,18 @@ public class SentenceCompletionService {
     private final GeminiService geminiService;
     private final SentenceCompletionRepository sentenceCompletionRepository;
 
+    public List<SentenceCompletion> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
+        log.info("Fetching words starting from sequence: {}, language: {}, level: {}", sequenceNumber, language, level);
+
+        Pageable limit = PageRequest.of(0, defaultCount);
+
+        return sentenceCompletionRepository.findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
+                language,
+                level,
+                sequenceNumber,
+                limit
+        );
+    }
     public List<SentenceCompletion> getAndShuffleSentences(EnglishLevel level, Language language) throws JsonMappingException {
         // GeminiService'den cümleleri al
         List<SentenceCompletion> sentences = geminiService.getSentenceCompletions(level, language);

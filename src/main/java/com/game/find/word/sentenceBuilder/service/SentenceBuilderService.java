@@ -2,6 +2,7 @@ package com.game.find.word.sentenceBuilder.service;
 
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.game.find.word.ScrambledWord.entity.Words;
 import com.game.find.word.SentenceCompletion.repository.SentenceCompletionRepository;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
@@ -12,6 +13,8 @@ import com.game.find.word.sentenceBuilder.repository.SentenceBuildGameRepository
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,8 +39,21 @@ public class SentenceBuilderService {
     private final MongoTemplate mongoTemplate;
 
     private final GeminiService geminiService;
-    private final SentenceCompletionRepository sentenceCompletionRepository;
     private final SentenceBuildGameRepository sentenceBuildGameRepository;
+
+
+    public List<SentenceBuildGame> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
+        log.info("Fetching words starting from sequence: {}, language: {}, level: {}", sequenceNumber, language, level);
+
+        Pageable limit = PageRequest.of(0, defaultCount);
+
+        return sentenceBuildGameRepository.findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
+                language,
+                level,
+                sequenceNumber,
+                limit
+        );
+    }
 
 
     public List<SentenceBuildGame> getTodaySentencesForBuildGame(Language language, EnglishLevel level) {

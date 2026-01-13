@@ -1,6 +1,7 @@
 package com.game.find.word.VoiceMatch.service;
 
 
+import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
 import com.game.find.word.SentenceCompletion.repository.SentenceCompletionRepository;
@@ -10,6 +11,8 @@ import com.game.find.word.googleAI.service.GeminiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
@@ -32,11 +35,20 @@ public class VoiceMatchService {
     private int defaultCount;
     private final MongoTemplate mongoTemplate;
 
-    private final GeminiService geminiService;
-    private final SentenceCompletionRepository sentenceCompletionRepository;
     private final VoiceMatchRepository repository;
 
+    public List<VoiceMatch> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
+        log.info("Fetching words starting from sequence: {}, language: {}, level: {}", sequenceNumber, language, level);
 
+        Pageable limit = PageRequest.of(0, defaultCount);
+
+        return repository.findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
+                language,
+                level,
+                sequenceNumber,
+                limit
+        );
+    }
     public List<VoiceMatch> getToday(Language language, EnglishLevel level) {
         LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
         LocalDateTime endOfDay = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(999999999);

@@ -4,6 +4,8 @@ package com.game.find.word.SentenceCompletion.repository;
 import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
+import com.game.find.word.sentenceBuilder.entity.SentenceBuildGame;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,5 +20,15 @@ public interface SentenceCompletionRepository extends MongoRepository<SentenceCo
             LocalDateTime startOfDay,
             LocalDateTime endOfDay);
 
+    // sequenceNumber >= startSeq kriterine uyan,
+    // dile ve seviyeye göre filtrelenmiş verileri getirir.
+    List<SentenceCompletion> findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
+            Language language,
+            EnglishLevel level,
+            Long startSeq,
+            Pageable pageable
+    );
+
+    boolean existsBySentenceAndAnswerAndLanguageAndLevel(String sentence, String answer, Language language, EnglishLevel level);
     List<SentenceCompletion> findByLevelAndCreatedAtBetween(EnglishLevel level, LocalDateTime startOfDay, LocalDateTime endOfDay);
 }
