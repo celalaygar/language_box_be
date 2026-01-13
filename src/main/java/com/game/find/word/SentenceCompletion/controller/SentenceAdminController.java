@@ -4,6 +4,9 @@ package com.game.find.word.SentenceCompletion.controller;
 import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
 import com.game.find.word.SentenceCompletion.service.SentenceCompletionService;
 import com.game.find.word.base.util.ApiPaths;
+import com.game.find.word.sentenceBuilder.entity.SentenceBuildGame;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,25 +19,30 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SentenceAdminController {
 
-    private final SentenceCompletionService sentenceService;
+    private final SentenceCompletionService service;
 
-    @PostMapping("/saveAll")
-    public ResponseEntity<List<SentenceCompletion>> saveAll(@RequestBody List<SentenceCompletion> completions) {
 
-        return new ResponseEntity<>(sentenceService.saveAll(completions), HttpStatus.OK);
-
+    @PostMapping("/bulkSaveData")
+    @Operation(
+            summary = "Get all words by level",
+            description = "Returns all words for the given English level as a single page response",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful retrieval")
+            }
+    )
+    public Integer bulkSaveWords(@RequestBody List<SentenceCompletion> list) {
+        return service.bulkSaveData(list);
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<SentenceCompletion> save(@RequestBody SentenceCompletion completions) {
-
-        return new ResponseEntity<>(sentenceService.save(completions), HttpStatus.OK);
-
-    }
-    @GetMapping("/findAll")
-    public ResponseEntity<List<SentenceCompletion>> findAll(@RequestBody SentenceCompletion completions) {
-
-        return new ResponseEntity<>(sentenceService.findAll(), HttpStatus.OK);
-
+    @GetMapping("/reindexAllData")
+    @Operation(
+            summary = "Get all words by level",
+            description = "Returns all words for the given English level as a single page response",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful retrieval")
+            }
+    )
+    public Boolean reindexAllWords() {
+        return service.reindexAllData();
     }
 }

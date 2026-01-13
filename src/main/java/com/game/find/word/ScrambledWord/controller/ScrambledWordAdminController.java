@@ -21,7 +21,7 @@ public class ScrambledWordAdminController {
 
     private final WordsService service;
 
-    @PostMapping("/bulkSaveWords")
+    @PostMapping("/bulkSaveData")
     @Operation(
             summary = "Get all words by level",
             description = "Returns all words for the given English level as a single page response",
@@ -29,11 +29,11 @@ public class ScrambledWordAdminController {
                     @ApiResponse(responseCode = "200", description = "Successful retrieval")
             }
     )
-    public Integer bulkSaveWords(@RequestBody List<Words> wordsList) {
-        return service.bulkSaveWords(wordsList);
+    public Integer bulkSaveWords(@RequestBody List<Words> list) {
+        return service.bulkSaveData(list);
     }
 
-    @GetMapping("/reindexAllWords")
+    @GetMapping("/reindexAllData")
     @Operation(
             summary = "Get all words by level",
             description = "Returns all words for the given English level as a single page response",
@@ -42,6 +42,6 @@ public class ScrambledWordAdminController {
             }
     )
     public Boolean reindexAllWords() {
-        return service.reindexAllWords();
+        return service.reindexAllData();
     }
 }

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -104,5 +105,67 @@ public class VoiceMatchService {
             return item;
         }).collect(Collectors.toList());
         return repository.saveAll(list);
+    }
+
+    public Integer bulkSaveData(List<VoiceMatch> voiceMatches) {
+        log.info("Starting bulk save for {} Voice Match List", voiceMatches.size());
+
+        // 1. Veritabanında olmayan (unique) kelimeleri filtrele
+        List<VoiceMatch> list = voiceMatches.stream()
+                .filter(w -> !repository.existsByCorrectSentenceAndLanguageAndLevel(
+                        w.getCorrectSentence(),
+                        w.getLanguage(),
+                        w.getLevel()))
+                .peek(w -> {
+                    // sequenceNumber'ı garanti altına almak için null set ediyoruz
+                    w.setSequenceNumber(null);
+                    // Oluşturulma tarihini set et (Eğer modelde @CreatedDate yoksa)
+                    if (w.getCreatedAt() == null) {
+                        w.setCreatedAt(LocalDateTime.now());
+                    }
+                })
+                .toList();
+
+        if (list.isEmpty()) {
+            log.warn("No new unique words found to save.");
+            return 0;
+        }
+
+        // 2. Toplu kaydet
+        List<VoiceMatch> savedWords = repository.saveAll(list);
+        log.info("Successfully saved {} new Voice Match List.", savedWords.size());
+
+        return savedWords.size();
+    }
+
+
+    public Boolean reindexAllData() {
+        try {
+            log.info("Starting to re-index sequence numbers for all Voice Match List...");
+
+            for (Language lang : Language.values()) {
+                for (EnglishLevel lvl : EnglishLevel.values()) {
+
+                    List<VoiceMatch> list = repository.findByLanguageAndLevel(lang, lvl);
+
+                    if (!list.isEmpty()) {
+                        list.sort(Comparator.comparing(VoiceMatch::getSequenceNumber,
+                                Comparator.nullsLast(Comparator.naturalOrder())));
+
+                        long counter = 1;
+                        for (VoiceMatch voiceMatch : list) {
+                            voiceMatch.setSequenceNumber(counter++);
+                        }
+
+                        repository.saveAll(list);
+                        log.info("Re-indexed {} Voice Match List for Language: {} and Level: {}", list.size(), lang, lvl);
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            log.error("Error occurred while re-indexing Voice Match List: ", e);
+            return false;
+        }
     }
 }

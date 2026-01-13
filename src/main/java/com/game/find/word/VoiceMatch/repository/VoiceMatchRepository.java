@@ -16,6 +16,7 @@ public interface VoiceMatchRepository extends MongoRepository<VoiceMatch, String
             EnglishLevel level,
             LocalDateTime startOfDay,
             LocalDateTime endOfDay);
+    List<VoiceMatch> findByLanguageAndLevel( Language language, EnglishLevel level);
 
     // sequenceNumber >= startSeq kriterine uyan,
     // dile ve seviyeye göre filtrelenmiş verileri getirir.

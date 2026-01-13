@@ -61,7 +61,7 @@ public class WordsService {
         );
     }
 
-    public Boolean reindexAllWords() {
+    public Boolean reindexAllData() {
         try {
             log.info("Starting to re-index sequence numbers for all words...");
 
@@ -96,7 +96,7 @@ public class WordsService {
      * @param wordsList Kaydedilmek istenen kelime listesi
      * @return Başarıyla kaydedilen kelime sayısı
      */
-    public Integer bulkSaveWords(List<Words> wordsList) {
+    public Integer bulkSaveData(List<Words> wordsList) {
         log.info("Starting bulk save for {} words", wordsList.size());
 
         // 1. Veritabanında olmayan (unique) kelimeleri filtrele

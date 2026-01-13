@@ -19,6 +19,7 @@ public interface SentenceBuildGameRepository extends MongoRepository<SentenceBui
             LocalDateTime startOfDay,
             LocalDateTime endOfDay);
 
+    List<SentenceBuildGame> findByLanguageAndLevel( Language language, EnglishLevel level);
     // sequenceNumber >= startSeq kriterine uyan,
     // dile ve seviyeye göre filtrelenmiş verileri getirir.
     List<SentenceBuildGame> findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
@@ -27,8 +28,5 @@ public interface SentenceBuildGameRepository extends MongoRepository<SentenceBui
             Long startSeq,
             Pageable pageable
     );
-    boolean existsBySentenceAndLanguageAndLevel(String sentence,  Language language, EnglishLevel level);
-
-
-    List<SentenceBuildGame> findByLevelAndCreatedAtBetween(EnglishLevel level, LocalDateTime startOfDay, LocalDateTime endOfDay);
+    boolean existsBySentenceAndLanguageAndLevel(String sentence, Language language, EnglishLevel level);
 }

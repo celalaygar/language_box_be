@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -126,5 +127,70 @@ public class SentenceCompletionService {
             return item;
         }).collect(Collectors.toList());
         return sentenceCompletionRepository.saveAll(list);
+    }
+
+
+
+    public Integer bulkSaveData(List<SentenceCompletion> completions) {
+        log.info("Starting bulk save for {} Completion List", completions.size());
+
+        // 1. Veritabanında olmayan (unique) kelimeleri filtrele
+        List<SentenceCompletion> list = completions.stream()
+                .filter(w -> !sentenceCompletionRepository.existsBySentenceAndAnswerAndLanguageAndLevel(
+                        w.getSentence(),
+                        w.getAnswer(),
+                        w.getLanguage(),
+                        w.getLevel()))
+                .peek(w -> {
+                    // sequenceNumber'ı garanti altına almak için null set ediyoruz
+                    w.setSequenceNumber(null);
+                    // Oluşturulma tarihini set et (Eğer modelde @CreatedDate yoksa)
+                    if (w.getCreatedAt() == null) {
+                        w.setCreatedAt(LocalDateTime.now());
+                    }
+                })
+                .toList();
+
+        if (list.isEmpty()) {
+            log.warn("No new unique words found to save.");
+            return 0;
+        }
+
+        // 2. Toplu kaydet
+        List<SentenceCompletion> savedWords = sentenceCompletionRepository.saveAll(list);
+        log.info("Successfully saved {} new Completion List.", savedWords.size());
+
+        return savedWords.size();
+    }
+
+
+    public Boolean reindexAllData() {
+        try {
+            log.info("Starting to re-index sequence numbers for all completion List...");
+
+            for (Language lang : Language.values()) {
+                for (EnglishLevel lvl : EnglishLevel.values()) {
+
+                    List<SentenceCompletion> list = sentenceCompletionRepository.findByLanguageAndLevel(lang, lvl);
+
+                    if (!list.isEmpty()) {
+                        list.sort(Comparator.comparing(SentenceCompletion::getSequenceNumber,
+                                Comparator.nullsLast(Comparator.naturalOrder())));
+
+                        long counter = 1;
+                        for (SentenceCompletion completion : list) {
+                            completion.setSequenceNumber(counter++);
+                        }
+
+                        sentenceCompletionRepository.saveAll(list);
+                        log.info("Re-indexed {} completion List for Language: {} and Level: {}", list.size(), lang, lvl);
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            log.error("Error occurred while re-indexing completion List: ", e);
+            return false;
+        }
     }
 }

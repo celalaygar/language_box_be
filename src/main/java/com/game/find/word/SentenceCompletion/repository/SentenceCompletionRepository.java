@@ -20,6 +20,7 @@ public interface SentenceCompletionRepository extends MongoRepository<SentenceCo
             LocalDateTime startOfDay,
             LocalDateTime endOfDay);
 
+    List<SentenceCompletion> findByLanguageAndLevel( Language language, EnglishLevel level);
     // sequenceNumber >= startSeq kriterine uyan,
     // dile ve seviyeye göre filtrelenmiş verileri getirir.
     List<SentenceCompletion> findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
@@ -30,5 +31,4 @@ public interface SentenceCompletionRepository extends MongoRepository<SentenceCo
     );
 
     boolean existsBySentenceAndAnswerAndLanguageAndLevel(String sentence, String answer, Language language, EnglishLevel level);
-    List<SentenceCompletion> findByLevelAndCreatedAtBetween(EnglishLevel level, LocalDateTime startOfDay, LocalDateTime endOfDay);
 }

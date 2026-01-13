@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -110,5 +111,67 @@ public class SentenceBuilderService {
             return item;
         }).collect(Collectors.toList());
         return sentenceBuildGameRepository.saveAll(list);
+    }
+
+    public Integer bulkSaveData(List<SentenceBuildGame> gameList) {
+        log.info("Starting bulk save for {} game List", gameList.size());
+
+        // 1. Veritabanında olmayan (unique) kelimeleri filtrele
+        List<SentenceBuildGame> gameListToSave = gameList.stream()
+                .filter(w -> !sentenceBuildGameRepository.existsBySentenceAndLanguageAndLevel(
+                        w.getSentence(),
+                        w.getLanguage(),
+                        w.getLevel()))
+                .peek(w -> {
+                    // sequenceNumber'ı garanti altına almak için null set ediyoruz
+                    w.setSequenceNumber(null);
+                    // Oluşturulma tarihini set et (Eğer modelde @CreatedDate yoksa)
+                    if (w.getCreatedAt() == null) {
+                        w.setCreatedAt(LocalDateTime.now());
+                    }
+                })
+                .toList();
+
+        if (gameListToSave.isEmpty()) {
+            log.warn("No new unique words found to save.");
+            return 0;
+        }
+
+        // 2. Toplu kaydet
+        List<SentenceBuildGame> savedWords = sentenceBuildGameRepository.saveAll(gameListToSave);
+        log.info("Successfully saved {} new game List.", savedWords.size());
+
+        return savedWords.size();
+    }
+
+
+    public Boolean reindexAllData() {
+        try {
+            log.info("Starting to re-index sequence numbers for all game List...");
+
+            for (Language lang : Language.values()) {
+                for (EnglishLevel lvl : EnglishLevel.values()) {
+
+                    List<SentenceBuildGame> list = sentenceBuildGameRepository.findByLanguageAndLevel(lang, lvl);
+
+                    if (!list.isEmpty()) {
+                        list.sort(Comparator.comparing(SentenceBuildGame::getSequenceNumber,
+                                Comparator.nullsLast(Comparator.naturalOrder())));
+
+                        long counter = 1;
+                        for (SentenceBuildGame game : list) {
+                            game.setSequenceNumber(counter++);
+                        }
+
+                        sentenceBuildGameRepository.saveAll(list);
+                        log.info("Re-indexed {} game List for Language: {} and Level: {}", list.size(), lang, lvl);
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            log.error("Error occurred while re-indexing game List: ", e);
+            return false;
+        }
     }
 }
