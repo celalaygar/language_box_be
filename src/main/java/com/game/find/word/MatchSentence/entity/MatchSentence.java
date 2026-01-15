@@ -1,4 +1,4 @@
-package com.game.find.word.VoiceMatch.entity;
+package com.game.find.word.MatchSentence.entity;
 
 
 import com.game.find.word.base.model.EnglishLevel;
@@ -18,9 +18,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "voice_match")
+@Document(collection = "match_sentence")
 @CompoundIndex(name = "voice_match_idx", def = "{'correctSentence': 1, 'language': 1, 'level': 1}", unique = true)
-public class VoiceMatch {
+public class MatchSentence {
     @Id
     private String id;
     private String correctSentence;

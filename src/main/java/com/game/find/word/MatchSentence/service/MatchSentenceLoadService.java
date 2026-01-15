@@ -1,10 +1,10 @@
-package com.game.find.word.VoiceMatch.service;
+package com.game.find.word.MatchSentence.service;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.game.find.word.VoiceMatch.entity.VoiceMatch;
-import com.game.find.word.VoiceMatch.repository.VoiceMatchRepository; // Repository'nizi kontrol edin
+import com.game.find.word.MatchSentence.entity.MatchSentence;
+import com.game.find.word.MatchSentence.repository.MatchSentenceRepository; // Repository'nizi kontrol edin
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -22,9 +22,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class VoiceMatchLoadService {
+public class MatchSentenceLoadService {
 
-    private final VoiceMatchRepository repository;
+    private final MatchSentenceRepository repository;
     private final MongoTemplate mongoTemplate;
     private final ObjectMapper objectMapper;
 
@@ -32,41 +32,41 @@ public class VoiceMatchLoadService {
     @Async
     public void initVoiceMatchData() {
         try {
-            log.info("Checking if voice match data needs to be loaded...");
+            log.info("Checking if Match Sentence data needs to be loaded...");
 
             // Eğer veritabanı boşsa yükleme yap
             if (repository.count() > 0) {
-                log.info("Voice match database is not empty. Skipping load.");
+                log.info("Match Sentence database is not empty. Skipping load.");
                 return;
             }
 
             // JSON dosyasını oku: resources/json/voiceMatch.json
             InputStream inputStream = new ClassPathResource("json/voiceMatch.json").getInputStream();
-            List<VoiceMatch> voiceMatchList = objectMapper.readValue(inputStream, new TypeReference<List<VoiceMatch>>() {});
+            List<MatchSentence> voiceMatchList = objectMapper.readValue(inputStream, new TypeReference<List<MatchSentence>>() {});
 
-            log.info("Loaded {} voice match items from JSON. Starting bulk save...", voiceMatchList.size());
+            log.info("Loaded {} Match Sentence items from JSON. Starting bulk save...", voiceMatchList.size());
             bulkSaveInChunks(voiceMatchList, 5000);
 
-            log.info("Voice match data initialization completed successfully.");
+            log.info("Match Sentence data initialization completed successfully.");
         } catch (Exception e) {
-            log.error("Failed to load voice match data: ", e);
+            log.error("Failed to load Match Sentence data: ", e);
         }
     }
 
-    private void bulkSaveInChunks(List<VoiceMatch> list, int chunkSize) {
+    private void bulkSaveInChunks(List<MatchSentence> list, int chunkSize) {
         for (int i = 0; i < list.size(); i += chunkSize) {
             int end = Math.min(i + chunkSize, list.size());
-            List<VoiceMatch> chunk = list.subList(i, end);
+            List<MatchSentence> chunk = list.subList(i, end);
 
             executeBulkInsert(chunk);
-            log.info("Voice Match Load Progress: {}/{}", end, list.size());
+            log.info("Match Sentence Load Progress: {}/{}", end, list.size());
         }
     }
 
-    private void executeBulkInsert(List<VoiceMatch> chunk) {
-        BulkOperations bulkOps = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, VoiceMatch.class);
+    private void executeBulkInsert(List<MatchSentence> chunk) {
+        BulkOperations bulkOps = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, MatchSentence.class);
 
-        for (VoiceMatch vm : chunk) {
+        for (MatchSentence vm : chunk) {
             if (vm.getCreatedAt() == null) {
                 vm.setCreatedAt(LocalDateTime.now());
             }
@@ -78,7 +78,7 @@ public class VoiceMatchLoadService {
         try {
             bulkOps.execute();
         } catch (Exception e) {
-            log.debug("Some voice match items were skipped due to duplication.");
+            log.debug("Some Match Sentence items were skipped due to duplication.");
         }
     }
 }

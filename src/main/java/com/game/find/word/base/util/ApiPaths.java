@@ -9,22 +9,18 @@ public class ApiPaths {
     private static final String KEYWORD_QUIZ_PATH = "/keyword-quiz";
     private static final String GLOBAL_PATH = "/global";
     private static final String VERSION_PATH = "/version";
-    private static final String VOICE_MATCH_PATH = "/voice-match";
+    private static final String MATCH_SENTENCE_PATH = "/match-sentence";
     private static final String GRID_CHALLANGE_PATH = "/grid-challange";
-
-    public static final class GridChallangeAdminCtrl {
-        public static final String CTRL = BASE_PATH_V1 +  ADMIN_PATH + VOICE_MATCH_PATH;
-    }
 
     public static final class GridChallangeCtrl {
         public static final String CTRL = BASE_PATH_V1 + GRID_CHALLANGE_PATH;
     }
-    public static final class VoiceMatchAdminCtrl {
-        public static final String CTRL = BASE_PATH_V1 +  ADMIN_PATH + VOICE_MATCH_PATH;
+    public static final class MatchSentenceAdminCtrl {
+        public static final String CTRL = BASE_PATH_V1 +  ADMIN_PATH + MATCH_SENTENCE_PATH;
     }
 
-    public static final class VoiceMatchCtrl {
-        public static final String CTRL = BASE_PATH_V1 + VOICE_MATCH_PATH;
+    public static final class MatchSentencehCtrl {
+        public static final String CTRL = BASE_PATH_V1 + MATCH_SENTENCE_PATH;
     }
 
     public static final class VersionAdminCtrl {

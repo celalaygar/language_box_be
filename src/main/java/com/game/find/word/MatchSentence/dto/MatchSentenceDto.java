@@ -1,4 +1,4 @@
-package com.game.find.word.VoiceMatch.dto;
+package com.game.find.word.MatchSentence.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class VoiceMatchDto {
+public class MatchSentenceDto {
 
     @JsonProperty("correct_sentence")
     private String correctSentence;

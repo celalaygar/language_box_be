@@ -1,26 +1,25 @@
-package com.game.find.word.VoiceMatch.repository;
+package com.game.find.word.MatchSentence.repository;
 
-import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
-import com.game.find.word.VoiceMatch.entity.VoiceMatch;
+import com.game.find.word.MatchSentence.entity.MatchSentence;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface VoiceMatchRepository extends MongoRepository<VoiceMatch, String> {
-    List<VoiceMatch> findByLanguageAndLevelAndCreatedAtBetween(
+public interface MatchSentenceRepository extends MongoRepository<MatchSentence, String> {
+    List<MatchSentence> findByLanguageAndLevelAndCreatedAtBetween(
             Language language,
             EnglishLevel level,
             LocalDateTime startOfDay,
             LocalDateTime endOfDay);
-    List<VoiceMatch> findByLanguageAndLevel( Language language, EnglishLevel level);
+    List<MatchSentence> findByLanguageAndLevel(Language language, EnglishLevel level);
 
     // sequenceNumber >= startSeq kriterine uyan,
     // dile ve seviyeye göre filtrelenmiş verileri getirir.
-    List<VoiceMatch> findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
+    List<MatchSentence> findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
             Language language,
             EnglishLevel level,
             Long startSeq,
@@ -28,5 +27,5 @@ public interface VoiceMatchRepository extends MongoRepository<VoiceMatch, String
     );
 
     boolean existsByCorrectSentenceAndLanguageAndLevel(String correctSentence, Language language, EnglishLevel level);
-    List<VoiceMatch> findByLevelAndCreatedAtBetween(EnglishLevel level, LocalDateTime startOfDay, LocalDateTime endOfDay);
+    List<MatchSentence> findByLevelAndCreatedAtBetween(EnglishLevel level, LocalDateTime startOfDay, LocalDateTime endOfDay);
 }

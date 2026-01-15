@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
-import com.game.find.word.VoiceMatch.dto.VoiceMatchDto;
+import com.game.find.word.MatchSentence.dto.MatchSentenceDto;
 import com.game.find.word.googleAI.entity.ApiKey;
 import com.game.find.word.googleAI.dto.*;
 import com.game.find.word.googleAI.entity.ApiKeyType;
@@ -285,7 +285,7 @@ public class GeminiService {
      * @return A List of DTOs, each representing a single game item.
      * @throws JsonMappingException If the JSON response from the API is malformed.
      */
-    public List<VoiceMatchDto> getVoiceMatchItems(EnglishLevel level, Language language) throws JsonMappingException {
+    public List<MatchSentenceDto> getVoiceMatchItems(EnglishLevel level, Language language) throws JsonMappingException {
         int retryCount = 0;
 
         // Sabit öğe sayısı: 5
@@ -332,7 +332,7 @@ public class GeminiService {
                     String contentJson = textNode.asText().replace("```json\n", "").replace("\n```", "").trim();
 
                     // DTO listesine çevirme
-                    return objectMapper.readValue(contentJson, new TypeReference<List<VoiceMatchDto>>() {});
+                    return objectMapper.readValue(contentJson, new TypeReference<List<MatchSentenceDto>>() {});
 
                 }
             } catch (HttpClientErrorException.TooManyRequests e) {

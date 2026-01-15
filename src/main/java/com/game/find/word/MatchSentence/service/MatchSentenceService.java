@@ -1,13 +1,10 @@
-package com.game.find.word.VoiceMatch.service;
+package com.game.find.word.MatchSentence.service;
 
 
-import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
-import com.game.find.word.SentenceCompletion.repository.SentenceCompletionRepository;
-import com.game.find.word.VoiceMatch.entity.VoiceMatch;
-import com.game.find.word.VoiceMatch.repository.VoiceMatchRepository;
-import com.game.find.word.googleAI.service.GeminiService;
+import com.game.find.word.MatchSentence.entity.MatchSentence;
+import com.game.find.word.MatchSentence.repository.MatchSentenceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,14 +28,14 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class VoiceMatchService {
+public class MatchSentenceService {
     @Value("${app.sentence.default-count:3}")
     private int defaultCount;
     private final MongoTemplate mongoTemplate;
 
-    private final VoiceMatchRepository repository;
+    private final MatchSentenceRepository repository;
 
-    public List<VoiceMatch> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
+    public List<MatchSentence> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
         log.info("Fetching words starting from sequence: {}, language: {}, level: {}", sequenceNumber, language, level);
 
         Pageable limit = PageRequest.of(0, defaultCount);
@@ -50,10 +47,10 @@ public class VoiceMatchService {
                 limit
         );
     }
-    public List<VoiceMatch> getToday(Language language, EnglishLevel level) {
+    public List<MatchSentence> getToday(Language language, EnglishLevel level) {
         LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
         LocalDateTime endOfDay = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(999999999);
-        List<VoiceMatch> list = repository.findByLanguageAndLevelAndCreatedAtBetween(
+        List<MatchSentence> list = repository.findByLanguageAndLevelAndCreatedAtBetween(
                 language, level, startOfDay, endOfDay);
 
         log.info("VoiceMatchService.getTodayWordSearchGame " + new Date());
@@ -61,7 +58,7 @@ public class VoiceMatchService {
     }
 
 
-    public List<VoiceMatch> getRandom(Language language, EnglishLevel level, Integer count) {
+    public List<MatchSentence> getRandom(Language language, EnglishLevel level, Integer count) {
         if (count == null || count <= 0) {
             count = defaultCount;
         }
@@ -75,13 +72,13 @@ public class VoiceMatchService {
         SampleOperation sampleStage = sample(count);
 
         Aggregation aggregation = newAggregation(matchStage, sampleStage);
-        List<VoiceMatch> list = mongoTemplate.aggregate(
+        List<MatchSentence> list = mongoTemplate.aggregate(
                 aggregation,
                 "voice_match", // collection adı
-                VoiceMatch.class
+                MatchSentence.class
         ).getMappedResults();
         // her VoiceMatch içindeki similarOptions listesini rastgele sırala
-        for (VoiceMatch vm : list) {
+        for (MatchSentence vm : list) {
             if (vm.getSimilarOptions() != null && !vm.getSimilarOptions().isEmpty()) {
                 Collections.shuffle(vm.getSimilarOptions());
             }
@@ -90,16 +87,16 @@ public class VoiceMatchService {
     }
 
 
-    public List<VoiceMatch> findAll() {
+    public List<MatchSentence> findAll() {
         return repository.findAll();
     }
 
-    public VoiceMatch save(VoiceMatch game) {
+    public MatchSentence save(MatchSentence game) {
         game.setCreatedAt(LocalDateTime.now());
         return repository.save(game);
     }
 
-    public List<VoiceMatch> saveAll(List<VoiceMatch> list) {
+    public List<MatchSentence> saveAll(List<MatchSentence> list) {
         list = list.stream().map(item -> {
             item.setCreatedAt(LocalDateTime.now());
             return item;
@@ -107,11 +104,11 @@ public class VoiceMatchService {
         return repository.saveAll(list);
     }
 
-    public Integer bulkSaveData(List<VoiceMatch> voiceMatches) {
-        log.info("Starting bulk save for {} Voice Match List", voiceMatches.size());
+    public Integer bulkSaveData(List<MatchSentence> voiceMatches) {
+        log.info("Starting bulk save for {} Match Sentence List", voiceMatches.size());
 
         // 1. Veritabanında olmayan (unique) kelimeleri filtrele
-        List<VoiceMatch> list = voiceMatches.stream()
+        List<MatchSentence> list = voiceMatches.stream()
                 .filter(w -> !repository.existsByCorrectSentenceAndLanguageAndLevel(
                         w.getCorrectSentence(),
                         w.getLanguage(),
@@ -132,8 +129,8 @@ public class VoiceMatchService {
         }
 
         // 2. Toplu kaydet
-        List<VoiceMatch> savedWords = repository.saveAll(list);
-        log.info("Successfully saved {} new Voice Match List.", savedWords.size());
+        List<MatchSentence> savedWords = repository.saveAll(list);
+        log.info("Successfully saved {} new Match Sentence List.", savedWords.size());
 
         return savedWords.size();
     }
@@ -141,30 +138,30 @@ public class VoiceMatchService {
 
     public Boolean reindexAllData() {
         try {
-            log.info("Starting to re-index sequence numbers for all Voice Match List...");
+            log.info("Starting to re-index sequence numbers for all Match Sentence List...");
 
             for (Language lang : Language.values()) {
                 for (EnglishLevel lvl : EnglishLevel.values()) {
 
-                    List<VoiceMatch> list = repository.findByLanguageAndLevel(lang, lvl);
+                    List<MatchSentence> list = repository.findByLanguageAndLevel(lang, lvl);
 
                     if (!list.isEmpty()) {
-                        list.sort(Comparator.comparing(VoiceMatch::getSequenceNumber,
+                        list.sort(Comparator.comparing(MatchSentence::getSequenceNumber,
                                 Comparator.nullsLast(Comparator.naturalOrder())));
 
                         long counter = 1;
-                        for (VoiceMatch voiceMatch : list) {
+                        for (MatchSentence voiceMatch : list) {
                             voiceMatch.setSequenceNumber(counter++);
                         }
 
                         repository.saveAll(list);
-                        log.info("Re-indexed {} Voice Match List for Language: {} and Level: {}", list.size(), lang, lvl);
+                        log.info("Re-indexed {} Match Sentence List for Language: {} and Level: {}", list.size(), lang, lvl);
                     }
                 }
             }
             return true;
         } catch (Exception e) {
-            log.error("Error occurred while re-indexing Voice Match List: ", e);
+            log.error("Error occurred while re-indexing Match Sentence List: ", e);
             return false;
         }
     }

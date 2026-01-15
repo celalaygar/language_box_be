@@ -1,9 +1,8 @@
-package com.game.find.word.VoiceMatch.controller;
+package com.game.find.word.MatchSentence.controller;
 
 import com.game.find.word.ScrambledWord.dto.WordPageRequestDto;
-import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
-import com.game.find.word.VoiceMatch.entity.VoiceMatch;
-import com.game.find.word.VoiceMatch.service.VoiceMatchService;
+import com.game.find.word.MatchSentence.entity.MatchSentence;
+import com.game.find.word.MatchSentence.service.MatchSentenceService;
 import com.game.find.word.base.util.ApiPaths;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(ApiPaths.VoiceMatchCtrl.CTRL)
+@RequestMapping(ApiPaths.MatchSentencehCtrl.CTRL)
 @RequiredArgsConstructor
 @Tag(name = "Word public Controller", description = "API endpoints for the Word Finding Game")
-public class VoiceMatchController {
+public class MatchSentenceController {
 
-    private final VoiceMatchService wordService;
+    private final MatchSentenceService wordService;
 
 
     @PostMapping("/today")
@@ -30,7 +29,7 @@ public class VoiceMatchController {
                     @ApiResponse(responseCode = "200", description = "Successful retrieval")
             }
     )
-    public List<VoiceMatch> getTodayWords(@RequestBody WordPageRequestDto request) {
+    public List<MatchSentence> getTodayWords(@RequestBody WordPageRequestDto request) {
         return wordService.getRandom(request.getLanguage(), request.getLevel(), request.getCount());
     }
     @PostMapping("/getAllBySequenceNumber")
@@ -41,7 +40,7 @@ public class VoiceMatchController {
                     @ApiResponse(responseCode = "200", description = "Successful retrieval")
             }
     )
-    public List<VoiceMatch> getAllBySequenceNumber(@RequestBody WordPageRequestDto request) {
+    public List<MatchSentence> getAllBySequenceNumber(@RequestBody WordPageRequestDto request) {
         return wordService.getAllBySequenceNumber(request.getSequenceNumber(),
                 request.getLanguage(), request.getLevel());
     }

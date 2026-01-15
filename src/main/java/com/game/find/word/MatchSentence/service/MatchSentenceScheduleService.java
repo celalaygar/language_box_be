@@ -1,15 +1,14 @@
-package com.game.find.word.VoiceMatch.service;
+package com.game.find.word.MatchSentence.service;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
-import com.game.find.word.VoiceMatch.dto.VoiceMatchDto;
-import com.game.find.word.VoiceMatch.entity.VoiceMatch;
-import com.game.find.word.VoiceMatch.repository.VoiceMatchRepository;
+import com.game.find.word.MatchSentence.dto.MatchSentenceDto;
+import com.game.find.word.MatchSentence.entity.MatchSentence;
+import com.game.find.word.MatchSentence.repository.MatchSentenceRepository;
 import com.game.find.word.googleAI.service.GeminiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -21,10 +20,10 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class VoiceMatchScheduleService {
+public class MatchSentenceScheduleService {
 
-    private final VoiceMatchRepository repository;
-    private final VoiceMatchService service;
+    private final MatchSentenceRepository repository;
+    private final MatchSentenceService service;
     private final GeminiService geminiService;
 
     /**
@@ -51,13 +50,13 @@ public class VoiceMatchScheduleService {
                         log.info("Attempt #{} - Fetching words for level {} {} with language {}.",
                                 retryCount + 1, level.name(), level.getKey(), language.name());
 
-                        List<VoiceMatchDto> dtos = geminiService.getVoiceMatchItems( level, language);
+                        List<MatchSentenceDto> dtos = geminiService.getVoiceMatchItems( level, language);
                         if (CollectionUtils.isEmpty(dtos)) {
                             System.out.println("VoiceMatchScheduleService.fetchAndSaveEntity for level " + level.name() + " successfully saved with language " + language.name());
                             continue;
                         }
-                        List<VoiceMatch> list = dtos.stream().map(
-                                item -> VoiceMatch.builder()
+                        List<MatchSentence> list = dtos.stream().map(
+                                item -> MatchSentence.builder()
                                         .correctSentence(item.getCorrectSentence())
                                         .similarOptions(item.getSimilarOptions())
                                         .focusWords(item.getFocusWords())

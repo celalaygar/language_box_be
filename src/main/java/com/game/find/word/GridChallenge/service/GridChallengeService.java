@@ -4,7 +4,6 @@ package com.game.find.word.GridChallenge.service;
 import com.game.find.word.GridChallenge.entity.GridChallenge;
 import com.game.find.word.GridChallenge.dto.GridChallengeCreateRequest;
 import com.game.find.word.GridChallenge.repository.GridChallengeRepository;
-import com.game.find.word.VoiceMatch.entity.VoiceMatch;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
 
@@ -17,9 +16,7 @@ import org.springframework.data.mongodb.core.aggregation.SampleOperation;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 

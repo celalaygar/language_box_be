@@ -1,9 +1,8 @@
-package com.game.find.word.VoiceMatch.controller;
+package com.game.find.word.MatchSentence.controller;
 
 
-import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
-import com.game.find.word.VoiceMatch.entity.VoiceMatch;
-import com.game.find.word.VoiceMatch.service.VoiceMatchService;
+import com.game.find.word.MatchSentence.entity.MatchSentence;
+import com.game.find.word.MatchSentence.service.MatchSentenceService;
 import com.game.find.word.base.util.ApiPaths;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(ApiPaths.VoiceMatchAdminCtrl.CTRL)
+@RequestMapping(ApiPaths.MatchSentenceAdminCtrl.CTRL)
 @RequiredArgsConstructor
-public class VoiceMatchAdminController {
+public class MatchSentenceAdminController {
 
-    private final VoiceMatchService service;
+    private final MatchSentenceService service;
 
     @PostMapping("/bulkSaveData")
     @Operation(
@@ -27,7 +26,7 @@ public class VoiceMatchAdminController {
                     @ApiResponse(responseCode = "200", description = "Successful retrieval")
             }
     )
-    public Integer bulkSaveWords(@RequestBody List<VoiceMatch> list) {
+    public Integer bulkSaveWords(@RequestBody List<MatchSentence> list) {
         return service.bulkSaveData(list);
     }
 
