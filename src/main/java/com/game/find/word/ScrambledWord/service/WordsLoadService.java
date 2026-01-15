@@ -53,7 +53,7 @@ public class WordsLoadService {
                 return;
             }
 
-            InputStream inputStream = new ClassPathResource("json/word.json").getInputStream();
+            InputStream inputStream = new ClassPathResource("json/words.json").getInputStream();
 
             // Jackson'ın devasa dosyayı okurken hata vermemesi için buffer kullanabilirsin
             List<Words> wordsList = objectMapper.readValue(inputStream, new TypeReference<List<Words>>() {});
