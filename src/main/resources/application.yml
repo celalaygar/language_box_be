@@ -18,7 +18,8 @@ spring:
       max-request-size: 200MB
   jackson:
     serialization:
-    # Çok büyük verilerde timeout'u önlemek için gerekebilir
+      WRITE_DATES_AS_TIMESTAMPS: false
+      FAIL_ON_EMPTY_BEANS: false
   data:
     mongodb:
       uri: ${MONGO_URI}
