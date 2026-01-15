@@ -100,7 +100,7 @@ public class WordsService {
         log.info("Starting bulk save for {} words", wordsList.size());
 
         // 1. Veritabanında olmayan (unique) kelimeleri filtrele
-        List<Words> wordsToSave = wordsList.stream()
+/*        List<Words> wordsToSave = wordsList.stream()
                 .filter(w -> !repository.existsByWordAndLanguageAndLevel(
                         w.getWord(),
                         w.getLanguage(),
@@ -114,14 +114,14 @@ public class WordsService {
                     }
                 })
                 .toList();
-
-        if (wordsToSave.isEmpty()) {
+*/
+        if (wordsList.isEmpty()) {
             log.warn("No new unique words found to save.");
             return 0;
         }
 
         // 2. Toplu kaydet
-        List<Words> savedWords = repository.saveAll(wordsToSave);
+        List<Words> savedWords = repository.saveAll(wordsList);
         log.info("Successfully saved {} new words.", savedWords.size());
 
         return savedWords.size();
