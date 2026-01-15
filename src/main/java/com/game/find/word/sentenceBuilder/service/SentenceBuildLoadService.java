@@ -28,7 +28,7 @@ public class SentenceBuildLoadService {
     private final SentenceBuildGameRepository repository;
     private final MongoTemplate mongoTemplate;
     private final ObjectMapper objectMapper;
-
+/*
     @EventListener(ApplicationReadyEvent.class)
     @Async // Arka planda çalışması için (Ana sınıfınızda @EnableAsync olmalı)
     public void initSentenceData() {
@@ -53,7 +53,7 @@ public class SentenceBuildLoadService {
             log.error("Failed to load initial sentence data: ", e);
         }
     }
-
+*/
     /**
      * Cümle verilerini paketler halinde kaydeder.
      */
