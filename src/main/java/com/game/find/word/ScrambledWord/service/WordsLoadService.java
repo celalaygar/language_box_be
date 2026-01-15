@@ -6,17 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.game.find.word.ScrambledWord.entity.Words;
 import com.game.find.word.ScrambledWord.repository.ScrambledWordRepository;
 import com.game.find.word.ScrambledWord.repository.WordsRepository;
-import com.game.find.word.base.model.EnglishLevel;
-import com.game.find.word.base.model.Language;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -24,11 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +32,8 @@ public class WordsLoadService {
     private final WordsRepository repository;
     private final MongoTemplate mongoTemplate;
     private final ObjectMapper objectMapper;
+
+    /*
     @EventListener(ApplicationReadyEvent.class) // Uygulama tamamen hazır olduğunda çalışır
     @Async // İsteğe bağlı: Ana thread'i kilitlememek için (@EnableAsync eklemeyi unutma)
     public void initData() {
@@ -65,7 +58,7 @@ public class WordsLoadService {
             log.error("Failed to load initial data: ", e);
         }
     }
-
+*/
     /**
      * Veriyi parçalara bölerek BulkOperations ile çok hızlı kaydeder.
      */
