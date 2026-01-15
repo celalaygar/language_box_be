@@ -1,7 +1,9 @@
 
 server:
   port: ${SERVER_PORT}
-
+  tomcat:
+    max-swallow-size: -1 # Sınırsız
+    max-http-form-post-size: 200MB
 
 apple:
   auth:
@@ -10,6 +12,13 @@ apple:
 
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+  jackson:
+    serialization:
+    # Çok büyük verilerde timeout'u önlemek için gerekebilir
   data:
     mongodb:
       uri: ${MONGO_URI}
