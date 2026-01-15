@@ -27,7 +27,7 @@ public class SentenceCompletionLoadService {
     private final SentenceCompletionRepository repository;
     private final MongoTemplate mongoTemplate;
     private final ObjectMapper objectMapper;
-
+/*
     @EventListener(ApplicationReadyEvent.class)
     @Async
     public void initCompletionData() {
@@ -52,7 +52,7 @@ public class SentenceCompletionLoadService {
             log.error("Failed to load completion data: ", e);
         }
     }
-
+*/
     private void bulkSaveInChunks(List<SentenceCompletion> list, int chunkSize) {
         for (int i = 0; i < list.size(); i += chunkSize) {
             int end = Math.min(i + chunkSize, list.size());
