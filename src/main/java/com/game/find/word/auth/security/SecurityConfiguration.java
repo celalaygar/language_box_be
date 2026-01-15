@@ -51,7 +51,7 @@ public class SecurityConfiguration {
                                 "/api/auth/login",
                                 "/api/auth/register",
                                 ApiPaths.ScrambledWordCtrl.CTRL + "/**",
-                                ApiPaths.VoiceMatchCtrl.CTRL + "/**",
+                                ApiPaths.MatchSentencehCtrl.CTRL + "/**",
                                 ApiPaths.KeywordQuizCtrl.CTRL + "/**",
                                 ApiPaths.SentenceCtrl.CTRL + "/**",
                                 ApiPaths.SentenceBuilderCtrl.CTRL + "/**",
@@ -66,7 +66,7 @@ public class SecurityConfiguration {
                         .permitAll()
                         .requestMatchers(
                                 ApiPathConstant.BASE_PATH + "user/**",
-                                ApiPaths.VoiceMatchAdminCtrl.CTRL + "/**",
+                                ApiPaths.MatchSentenceAdminCtrl.CTRL + "/**",
                                 ApiPaths.KeywordQuizAdminCtrl.CTRL + "/**",
                                 ApiPaths.SentenceAdminCtrl.CTRL + "/**",
                                 ApiPaths.SentenceBuilderAdminCtrl.CTRL + "/**",
