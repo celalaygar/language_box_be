@@ -15,12 +15,6 @@ import java.util.Set;
 @Schema(description = "Request DTO for paginated word query")
 public class WordPageRequestDto {
 
-    @Schema(description = "Page number (0-based)", example = "0")
-    private Integer page = 0;
-
-    @Schema(description = "Number of words per page", example = "20")
-    private Integer size = 20;
-
     @Schema(description = "Filter by English level", example = "B1")
     private EnglishLevel level;
 

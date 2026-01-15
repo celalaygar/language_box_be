@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
@@ -34,15 +33,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.game.find.word.ScrambledWord.entity.Words;
-
-import org.springframework.core.io.ClassPathResource;
-
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -53,7 +43,23 @@ public class WordsService {
     private final ScrambledWordRepository scrambledWordRepository;
     private final WordsRepository repository;
     private final MongoTemplate mongoTemplate;
-    private final ObjectMapper objectMapper;
+    /**
+     * Belirli bir başlangıç sequenceNumber'ından itibaren
+     * defaultCount kadar kelimeyi liste olarak döner.
+     */
+    public List<Words> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
+        log.info("Fetching words starting from sequence: {}, language: {}, level: {}", sequenceNumber, language, level);
+
+        // Limit belirlemek için PageRequest kullanıyoruz (0. sayfa, defaultCount kadar kayıt)
+        Pageable limit = PageRequest.of(0, defaultCount);
+
+        return repository.findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
+                language,
+                level,
+                sequenceNumber,
+                limit
+        );
+    }
 
     public Boolean reindexAllData() {
         try {
