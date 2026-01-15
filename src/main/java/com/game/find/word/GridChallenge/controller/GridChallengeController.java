@@ -4,7 +4,7 @@ package com.game.find.word.GridChallenge.controller;
 import com.game.find.word.GridChallenge.entity.GridChallenge;
 import com.game.find.word.GridChallenge.dto.GridChallengeCreateRequest;
 import com.game.find.word.GridChallenge.service.GridChallengeService;
-import com.game.find.word.KeywordQuiz.dto.KeywordQuizRequestDto;
+import com.game.find.word.ScrambledWord.dto.WordPageRequestDto;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
 import com.game.find.word.base.util.ApiPaths;
@@ -32,7 +32,7 @@ public class GridChallengeController {
 
     @PostMapping("/today")
     public ResponseEntity<List<GridChallenge>> getChallenges(
-            @RequestBody KeywordQuizRequestDto request) {
+            @RequestBody WordPageRequestDto request) {
         List<GridChallenge> challenges = service.getRandom(request.getLevel(), request.getLanguage(), request.getCount());
         return ResponseEntity.ok(challenges);
     }

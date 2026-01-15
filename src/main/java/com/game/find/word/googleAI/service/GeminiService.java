@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
-import com.game.find.word.KeywordQuiz.dto.KeywordQuizDto;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
 import com.game.find.word.VoiceMatch.dto.VoiceMatchDto;
@@ -265,85 +264,6 @@ public class GeminiService {
                 e.printStackTrace();
                 System.err.println("GeminiService.getEnglishWords Exception error GeminiService.getMixedWords. Retrying... Attempt " + (retryCount + 1) + " for " + language.name() + " and " + level.name() + ".");
 
-                try {
-                    switchApiKey();
-                } catch (InterruptedException interruptedException) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
-            }
-            retryCount++;
-        }
-        return Collections.emptyList();
-    }
-
-
-    public List<KeywordQuizDto> getKeywordQuizsContent(EnglishLevel level, Language language) throws JsonMappingException {
-        int retryCount = 0;
-        while (retryCount < 5) {
-            try {
-                String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + getCurrentApiKey();
-
-                StringBuilder prompt = new StringBuilder();
-                prompt.append("Create a JSON array containing exactly 10 JSON objects for a keyword guessing game. ");
-                prompt.append("The content of the objects must be in " + language.getDescription() + " and at a " + level.getKey() + " level. ");
-                prompt.append("Each object must have three keys: `text`, `keywords`, and `correctKeyword`. ");
-                if(level == EnglishLevel.A1 || level == EnglishLevel.A2){
-                    prompt.append("The `text` field should contain a short paragraph of 2-3 sentences about a specific topic. ");
-                }
-                if(level == EnglishLevel.B1 || level == EnglishLevel.B2){
-                    prompt.append("The `text` field should contain a short paragraph of 3-4 sentences about a specific topic. ");
-                }
-                if(level == EnglishLevel.C1 || level == EnglishLevel.C2){
-                    prompt.append("The `text` field should contain a short paragraph of 4-5 sentences about a specific topic. ");
-                }
-                prompt.append("The `keywords` array must contain exactly five words, where one is a single-word synonym for the main topic of the text and is NOT present in the text itself. ");
-                prompt.append("The other four words should be random and unrelated to the topic. The other four words should not be related to the main topic.");
-                prompt.append("The `correctKeyword` field must have the exact same value as the correct synonym in the `keywords` array. ");
-                prompt.append("Only provide the JSON array, nothing else.");
-
-                PromptPart promptPart = new PromptPart(prompt.toString());
-                Content content = new Content(Collections.singletonList(promptPart));
-                RequestPayload requestPayload = new RequestPayload(Collections.singletonList(content));
-
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
-
-                HttpEntity<RequestPayload> entity = new HttpEntity<>(requestPayload, headers);
-
-                ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
-
-                if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-                    String responseBody = response.getBody();
-                    JsonNode rootNode = objectMapper.readTree(responseBody);
-                    JsonNode textNode = rootNode.path("candidates").path(0).path("content").path("parts").path(0).path("text");
-                    if (textNode.isMissingNode() || !textNode.isTextual()) {
-                        throw new RuntimeException("API response text is missing or not valid.");
-                    }
-                    String contentJson = textNode.asText().replace("```json\n", "").replace("\n```", "").trim();
-
-                    return objectMapper.readValue(contentJson, new TypeReference<List<KeywordQuizDto>>() {
-                    });
-                }
-            } catch (HttpClientErrorException.TooManyRequests e) {
-                System.err.println("Too Many Requests error GeminiService.getWordGuessingGameContent. Changing API key and retrying... (Attempt " + (retryCount + 1) + ")");
-                try {
-                    switchApiKey();
-                } catch (InterruptedException interruptedException) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
-            } catch (JsonMappingException e) {
-                System.err.println("JSON mapping error GeminiService.getWordGuessingGameContent. Retrying... Attempt " + (retryCount + 1) + " for " + language.name() + " and " + level.name() + ".");
-                try {
-                    Thread.sleep(8000);
-                } catch (InterruptedException interruptedException) {
-                    Thread.currentThread().interrupt();
-                    return Collections.emptyList();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.err.println("Exception error GeminiService.getWordGuessingGameContent. Retrying... Attempt " + (retryCount + 1) + " for " + language.name() + " and " + level.name() + ".");
                 try {
                     switchApiKey();
                 } catch (InterruptedException interruptedException) {
