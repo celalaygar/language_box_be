@@ -3,7 +3,6 @@ package com.game.find.word.base.controller;
 import com.game.find.word.base.util.ApiPaths;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
-import com.game.find.word.ScrambledWord.service.ScrambledWordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,7 +18,6 @@ import java.util.List;
 @Tag(name = "Word public Controller", description = "API endpoints for the Word Finding Game")
 public class GlobalController {
 
-    private final ScrambledWordService wordService;
 
 
     @GetMapping("/levels")

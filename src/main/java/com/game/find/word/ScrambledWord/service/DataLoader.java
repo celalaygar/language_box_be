@@ -2,7 +2,6 @@ package com.game.find.word.ScrambledWord.service;
 
 
 import com.game.find.word.base.model.EnglishLevel;
-import com.game.find.word.ScrambledWord.repository.ScrambledWordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -15,8 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DataLoader implements CommandLineRunner {
 
-    private final ScrambledWordRepository wordRepository;
-    private final ScrambledWordService wordService;
 
     @Override
     public void run(String... args) {

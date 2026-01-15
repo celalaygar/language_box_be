@@ -1,23 +1,16 @@
 package com.game.find.word.ScrambledWord.service;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.game.find.word.ScrambledWord.entity.Words;
-import com.game.find.word.ScrambledWord.repository.ScrambledWordRepository;
 import com.game.find.word.ScrambledWord.repository.WordsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,7 +21,6 @@ public class WordsLoadService {
 
     @Value("${app.words.default-count:20}")
     private int defaultCount;
-    private final ScrambledWordRepository scrambledWordRepository;
     private final WordsRepository repository;
     private final MongoTemplate mongoTemplate;
     private final ObjectMapper objectMapper;

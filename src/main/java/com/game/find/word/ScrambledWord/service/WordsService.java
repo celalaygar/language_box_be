@@ -1,35 +1,22 @@
 package com.game.find.word.ScrambledWord.service;
 
 
-import com.game.find.word.ScrambledWord.dto.ScrambledWordResponseDto;
 import com.game.find.word.ScrambledWord.entity.*;
-import com.game.find.word.ScrambledWord.model.Word;
-import com.game.find.word.ScrambledWord.repository.ScrambledWordRepository;
 import com.game.find.word.ScrambledWord.repository.WordsRepository;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.MatchOperation;
-import org.springframework.data.mongodb.core.aggregation.SampleOperation;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 
-import java.io.InputStream;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sample;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 
@@ -40,7 +27,6 @@ public class WordsService {
 
     @Value("${app.words.default-count:20}")
     private int defaultCount;
-    private final ScrambledWordRepository scrambledWordRepository;
     private final WordsRepository repository;
     private final MongoTemplate mongoTemplate;
     /**
