@@ -3,6 +3,7 @@ package com.game.find.word.SentenceCompletion.service;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.game.find.word.SentenceCompletion.repository.SentenceCompletionRepository;
+import com.game.find.word.base.model.BaseGameResponse;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
 import com.game.find.word.base.model.Language;
@@ -39,18 +40,33 @@ public class SentenceCompletionService {
     private final MongoTemplate mongoTemplate;
     private final GeminiService geminiService;
     private final SentenceCompletionRepository sentenceCompletionRepository;
+    /**
+     * Cümle tamamlama oyun verilerini BaseGameResponse formatında döner.
+     */
+    public BaseGameResponse<SentenceCompletion> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
+        log.info("Fetching completions starting from sequence: {}, language: {}, level: {}", sequenceNumber, language, level);
 
-    public List<SentenceCompletion> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
-        log.info("Fetching words starting from sequence: {}, language: {}, level: {}", sequenceNumber, language, level);
-
+        // 1. Sayfalama ayarı (0. sayfadan başla, defaultCount kadar getir)
         Pageable limit = PageRequest.of(0, defaultCount);
 
-        return sentenceCompletionRepository.findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
+        // 2. Belirli bir sıradan itibaren verileri getir
+        List<SentenceCompletion> completions = sentenceCompletionRepository.findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
                 language,
                 level,
                 sequenceNumber,
                 limit
         );
+
+        // 3. Toplam kayıt sayısını al (size alanı için)
+        long totalSize = sentenceCompletionRepository.countByLanguageAndLevel(language, level);
+
+        // 4. BaseGameResponse ile sarmalayarak döndür
+        return BaseGameResponse.<SentenceCompletion>builder()
+                .level(level)
+                .language(language)
+                .size( totalSize) // Toplam cümle sayısı
+                .list(completions)     // Gelen veri listesi
+                .build();
     }
     public List<SentenceCompletion> getAndShuffleSentences(EnglishLevel level, Language language) throws JsonMappingException {
         // GeminiService'den cümleleri al

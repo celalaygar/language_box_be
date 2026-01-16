@@ -2,6 +2,7 @@ package com.game.find.word.sentenceBuilder.controller;
 
 
 import com.game.find.word.ScrambledWord.entity.Words;
+import com.game.find.word.base.model.BaseGameResponse;
 import com.game.find.word.base.util.ApiPaths;
 import com.game.find.word.ScrambledWord.dto.WordPageRequestDto;
 import com.game.find.word.sentenceBuilder.entity.SentenceBuildGame;
@@ -40,7 +41,7 @@ public class SentenceBuilderController {
                     @ApiResponse(responseCode = "200", description = "Successful retrieval")
             }
     )
-    public List<SentenceBuildGame> getAllBySequenceNumber(@RequestBody WordPageRequestDto request) {
+    public BaseGameResponse<SentenceBuildGame> getAllBySequenceNumber(@RequestBody WordPageRequestDto request) {
         return sentenceBuilderService.getAllBySequenceNumber(request.getSequenceNumber(),
                 request.getLanguage(), request.getLevel());
     }

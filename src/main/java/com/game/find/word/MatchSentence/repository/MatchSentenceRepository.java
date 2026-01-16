@@ -25,7 +25,6 @@ public interface MatchSentenceRepository extends MongoRepository<MatchSentence, 
             Long startSeq,
             Pageable pageable
     );
-
+    Long countByLanguageAndLevel(Language language, EnglishLevel level);
     boolean existsByCorrectSentenceAndLanguageAndLevel(String correctSentence, Language language, EnglishLevel level);
-    List<MatchSentence> findByLevelAndCreatedAtBetween(EnglishLevel level, LocalDateTime startOfDay, LocalDateTime endOfDay);
 }

@@ -4,6 +4,7 @@ package com.game.find.word.sentenceBuilder.service;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.game.find.word.ScrambledWord.entity.Words;
 import com.game.find.word.SentenceCompletion.repository.SentenceCompletionRepository;
+import com.game.find.word.base.model.BaseGameResponse;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
 import com.game.find.word.googleAI.service.GeminiService;
@@ -42,18 +43,28 @@ public class SentenceBuilderService {
     private final GeminiService geminiService;
     private final SentenceBuildGameRepository sentenceBuildGameRepository;
 
+    public BaseGameResponse<SentenceBuildGame> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
+        log.info("Fetching sentences starting from sequence: {}, language: {}, level: {}", sequenceNumber, language, level);
 
-    public List<SentenceBuildGame> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
-        log.info("Fetching words starting from sequence: {}, language: {}, level: {}", sequenceNumber, language, level);
-
+        // 1. Limitli listeyi çek (Sequence number'a göre sıralı)
         Pageable limit = PageRequest.of(0, defaultCount);
-
-        return sentenceBuildGameRepository.findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
+        List<SentenceBuildGame> sentenceList = sentenceBuildGameRepository.findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
                 language,
                 level,
                 sequenceNumber,
                 limit
         );
+
+        // 2. Toplam cümle sayısını al (Response'daki "size" alanı için)
+        long totalSize = sentenceBuildGameRepository.countByLanguageAndLevel(language, level);
+
+        // 3. BaseGameResponse formatında paketle
+        return BaseGameResponse.<SentenceBuildGame>builder()
+                .level(level)
+                .language(language)
+                .size(totalSize) // Toplam cümle sayısı
+                .list(sentenceList)    // Belirlenen sayıdaki (örn: 3 adet) liste
+                .build();
     }
 
 

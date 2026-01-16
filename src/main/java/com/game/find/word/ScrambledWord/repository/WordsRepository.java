@@ -23,4 +23,6 @@ public interface WordsRepository extends MongoRepository<Words, String> {
             Long startSeq,
             Pageable pageable
     );
+
+    Long countByLanguageAndLevel(Language language, EnglishLevel level);
 }

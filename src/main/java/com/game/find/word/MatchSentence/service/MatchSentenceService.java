@@ -1,6 +1,7 @@
 package com.game.find.word.MatchSentence.service;
 
 
+import com.game.find.word.base.model.BaseGameResponse;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
 import com.game.find.word.MatchSentence.entity.MatchSentence;
@@ -35,17 +36,31 @@ public class MatchSentenceService {
 
     private final MatchSentenceRepository repository;
 
-    public List<MatchSentence> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
-        log.info("Fetching words starting from sequence: {}, language: {}, level: {}", sequenceNumber, language, level);
+    /**
+     * Cümle eşleştirme verilerini BaseGameResponse formatında döner.
+     */
+    public BaseGameResponse<MatchSentence> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
+        log.info("Fetching matching sentences starting from sequence: {}, language: {}, level: {}", sequenceNumber, language, level);
 
+        // 1. Limitli veri setini getir (Sequence sırasına göre)
         Pageable limit = PageRequest.of(0, defaultCount);
-
-        return repository.findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
+        List<MatchSentence> matchSentences = repository.findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
                 language,
                 level,
                 sequenceNumber,
                 limit
         );
+
+        // 2. İlgili filtredeki toplam kayıt sayısını al (Response'daki "size" alanı)
+        long totalSize = repository.countByLanguageAndLevel(language, level);
+
+        // 3. BaseGameResponse ile sarmalayarak döndür
+        return BaseGameResponse.<MatchSentence>builder()
+                .level(level)
+                .language(language)
+                .size(totalSize) // Toplam cümle sayısı
+                .list(matchSentences)   // Çekilen veri listesi
+                .build();
     }
     public List<MatchSentence> getToday(Language language, EnglishLevel level) {
         LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);

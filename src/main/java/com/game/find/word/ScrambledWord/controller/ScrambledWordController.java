@@ -2,6 +2,7 @@ package com.game.find.word.ScrambledWord.controller;
 
 import com.game.find.word.ScrambledWord.entity.Words;
 import com.game.find.word.ScrambledWord.service.WordsService;
+import com.game.find.word.base.model.BaseGameResponse;
 import com.game.find.word.base.util.ApiPaths;
 import com.game.find.word.ScrambledWord.dto.WordPageRequestDto;
 import com.game.find.word.base.model.EnglishLevel;
@@ -57,7 +58,7 @@ public class ScrambledWordController {
                     @ApiResponse(responseCode = "200", description = "Successful retrieval")
             }
     )
-    public List<Words> getAllBySequenceNumber(@RequestBody WordPageRequestDto request) {
+    public BaseGameResponse<Words> getAllBySequenceNumber(@RequestBody WordPageRequestDto request) {
         return service.getAllBySequenceNumber(request.getSequenceNumber(),
                 request.getLanguage(), request.getLevel());
     }

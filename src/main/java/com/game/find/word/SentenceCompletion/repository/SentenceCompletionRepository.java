@@ -29,6 +29,6 @@ public interface SentenceCompletionRepository extends MongoRepository<SentenceCo
             Long startSeq,
             Pageable pageable
     );
-
+    Long countByLanguageAndLevel(Language language, EnglishLevel level);
     boolean existsBySentenceAndAnswerAndLanguageAndLevel(String sentence, String answer, Language language, EnglishLevel level);
 }

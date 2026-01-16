@@ -3,6 +3,8 @@ package com.game.find.word.MatchSentence.controller;
 import com.game.find.word.ScrambledWord.dto.WordPageRequestDto;
 import com.game.find.word.MatchSentence.entity.MatchSentence;
 import com.game.find.word.MatchSentence.service.MatchSentenceService;
+import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
+import com.game.find.word.base.model.BaseGameResponse;
 import com.game.find.word.base.util.ApiPaths;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -40,7 +42,7 @@ public class MatchSentenceController {
                     @ApiResponse(responseCode = "200", description = "Successful retrieval")
             }
     )
-    public List<MatchSentence> getAllBySequenceNumber(@RequestBody WordPageRequestDto request) {
+    public BaseGameResponse<MatchSentence>getAllBySequenceNumber(@RequestBody WordPageRequestDto request) {
         return wordService.getAllBySequenceNumber(request.getSequenceNumber(),
                 request.getLanguage(), request.getLevel());
     }

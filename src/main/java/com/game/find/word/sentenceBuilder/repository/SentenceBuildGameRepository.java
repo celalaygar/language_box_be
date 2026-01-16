@@ -29,4 +29,5 @@ public interface SentenceBuildGameRepository extends MongoRepository<SentenceBui
             Pageable pageable
     );
     boolean existsBySentenceAndLanguageAndLevel(String sentence, Language language, EnglishLevel level);
+    Long countByLanguageAndLevel(Language language, EnglishLevel level);
 }

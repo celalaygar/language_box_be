@@ -3,6 +3,7 @@ package com.game.find.word.ScrambledWord.service;
 
 import com.game.find.word.ScrambledWord.entity.*;
 import com.game.find.word.ScrambledWord.repository.WordsRepository;
+import com.game.find.word.base.model.BaseGameResponse;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
 import lombok.RequiredArgsConstructor;
@@ -33,18 +34,32 @@ public class WordsService {
      * Belirli bir başlangıç sequenceNumber'ından itibaren
      * defaultCount kadar kelimeyi liste olarak döner.
      */
-    public List<Words> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
-        log.info("Fetching words starting from sequence: {}, language: {}, level: {}", sequenceNumber, language, level);
+    /**
+     * Belirli bir başlangıç sequenceNumber'ından itibaren verileri getirir
+     * ve BaseGameResponse formatında paketler.
+     */
+    public BaseGameResponse<Words> getGameWords(Long sequenceNumber, Language language, EnglishLevel level) {
+        log.info("Fetching game data: seq={}, lang={}, level={}", sequenceNumber, language, level);
 
-        // Limit belirlemek için PageRequest kullanıyoruz (0. sayfa, defaultCount kadar kayıt)
+        // 1. 20 adet veriyi getir (Sayfalama ile limitli)
         Pageable limit = PageRequest.of(0, defaultCount);
-
-        return repository.findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
+        List<Words> wordsList = repository.findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
                 language,
                 level,
                 sequenceNumber,
                 limit
         );
+
+        // 2. İlgili level ve dildeki TOPLAM kelime sayısını al (Response'daki "size" alanı)
+        long totalSize = repository.countByLanguageAndLevel(language, level);
+
+        // 3. BaseGameResponse ile sarmala (Generic yapı)
+        return BaseGameResponse.<Words>builder()
+                .level(level)
+                .language(language)
+                .size(totalSize)
+                .list(wordsList)
+                .build();
     }
 
     public Boolean reindexAllData() {
