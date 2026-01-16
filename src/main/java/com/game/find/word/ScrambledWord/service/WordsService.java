@@ -38,7 +38,7 @@ public class WordsService {
      * Belirli bir başlangıç sequenceNumber'ından itibaren verileri getirir
      * ve BaseGameResponse formatında paketler.
      */
-    public BaseGameResponse<Words> getGameWords(Long sequenceNumber, Language language, EnglishLevel level) {
+    public BaseGameResponse<Words> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
         log.info("Fetching game data: seq={}, lang={}, level={}", sequenceNumber, language, level);
 
         // 1. 20 adet veriyi getir (Sayfalama ile limitli)
