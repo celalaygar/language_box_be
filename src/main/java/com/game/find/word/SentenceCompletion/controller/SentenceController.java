@@ -25,6 +25,10 @@ public class SentenceController {
         return sentenceService.getRandomSentences(request.getLanguage(), request.getLevel(), request.getCount());
     }
 
+    @GetMapping("/findAll")
+    public List<SentenceCompletion> findAll() {
+        return sentenceService.findAll();
+    }
 
     @PostMapping("/getAllBySequenceNumber")
     @Operation(

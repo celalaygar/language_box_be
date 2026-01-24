@@ -48,6 +48,17 @@ public class ScrambledWordController {
         return service.findAll(request.getLanguage(), request.getLevel());
     }
 
+    @GetMapping("/findAll")
+    @Operation(
+            summary = "Get all words by level",
+            description = "Returns all words for the given English level as a single page response",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful retrieval")
+            }
+    )
+    public List<Words> findAll() {
+        return service.findAll();
+    }
 
 
     @PostMapping("/getAllBySequenceNumber")

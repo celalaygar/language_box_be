@@ -72,7 +72,6 @@ public class MatchSentenceService {
         return list;
     }
 
-
     public List<MatchSentence> getRandom(Language language, EnglishLevel level, Integer count) {
         if (count == null || count <= 0) {
             count = defaultCount;

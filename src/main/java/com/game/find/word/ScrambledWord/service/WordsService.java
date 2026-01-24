@@ -143,4 +143,9 @@ public class WordsService {
         return response;
     }
 
+    public List<Words> findAll() {
+
+        List<Words> list = repository.findAll( );
+        return list;
+    }
 }

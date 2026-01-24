@@ -31,7 +31,10 @@ public class SentenceBuilderController {
         return sentenceBuilderService.getRandomSentences(request.getLanguage(), request.getLevel(), request.getCount());
     }
 
-
+    @GetMapping("/findAll")
+    public List<SentenceBuildGame> findAll() {
+        return sentenceBuilderService.findAll();
+    }
 
     @PostMapping("/getAllBySequenceNumber")
     @Operation(

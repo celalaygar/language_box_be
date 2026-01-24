@@ -23,6 +23,17 @@ public class MatchSentenceController {
     private final MatchSentenceService wordService;
 
 
+    @GetMapping("/findAll")
+    @Operation(
+            summary = "Get all words by level",
+            description = "Returns all words for the given English level as a single page response",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successful retrieval")
+            }
+    )
+    public List<MatchSentence> findAll() {
+        return wordService.findAll();
+    }
     @PostMapping("/today")
     @Operation(
             summary = "Get all words by level",
