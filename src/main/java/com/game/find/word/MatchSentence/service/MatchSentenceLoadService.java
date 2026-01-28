@@ -27,7 +27,7 @@ public class MatchSentenceLoadService {
     private final MatchSentenceRepository repository;
     private final MongoTemplate mongoTemplate;
     private final ObjectMapper objectMapper;
-
+/*
     @EventListener(ApplicationReadyEvent.class)
     @Async
     public void initVoiceMatchData() {
@@ -52,7 +52,7 @@ public class MatchSentenceLoadService {
             log.error("Failed to load Match Sentence data: ", e);
         }
     }
-
+*/
     private void bulkSaveInChunks(List<MatchSentence> list, int chunkSize) {
         for (int i = 0; i < list.size(); i += chunkSize) {
             int end = Math.min(i + chunkSize, list.size());
