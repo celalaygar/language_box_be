@@ -189,8 +189,8 @@ public class ListenWordService {
                     Collections.reverse(list);
 
                     if (!list.isEmpty()) {
-                        list.sort(Comparator.comparing(ListenWord::getSequenceNumber,
-                                Comparator.nullsLast(Comparator.naturalOrder())));
+//                        list.sort(Comparator.comparing(ListenWord::getSequenceNumber,
+//                                Comparator.nullsLast(Comparator.naturalOrder())));
 
                         long counter = 1;
                         for (ListenWord completion : list) {
