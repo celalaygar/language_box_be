@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                                 ApiPaths.ScrambledWordCtrl.CTRL + "/**",
                                 ApiPaths.MatchSentencehCtrl.CTRL + "/**",
                                 ApiPaths.KeywordQuizCtrl.CTRL + "/**",
+                                ApiPaths.ListenWordCtrl.CTRL + "/**",
                                 ApiPaths.SentenceCtrl.CTRL + "/**",
                                 ApiPaths.SentenceBuilderCtrl.CTRL + "/**",
                                 ApiPaths.GlobalCtrl.CTRL + "/**",
@@ -71,6 +72,7 @@ public class SecurityConfiguration {
                                 ApiPaths.SentenceAdminCtrl.CTRL + "/**",
                                 ApiPaths.SentenceBuilderAdminCtrl.CTRL + "/**",
                                 ApiPaths.ScrambledWordAdminCtrl.CTRL + "/**",
+                                ApiPaths.ListenWordAdminCtrl.CTRL + "/**",
                                 ApiPaths.VersionAdminCtrl.CTRL + "/**"
                         ).authenticated()
                         .requestMatchers(ApiPathConstant.BASE_PATH + "zodiac-match/**")
