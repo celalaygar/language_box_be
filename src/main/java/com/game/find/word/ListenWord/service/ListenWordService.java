@@ -205,6 +205,7 @@ public class ListenWordService {
             return true;
         } catch (Exception e) {
             log.error("Error occurred while re-indexing completion List: ", e);
+            System.out.println("Error occurred while re-indexing completion List: "+ e);
             return false;
         }
     }

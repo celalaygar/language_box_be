@@ -30,7 +30,7 @@ public class ListenWordLoadService {
     private final ListenWordRepository repository;
     private final MongoTemplate mongoTemplate;
     private final ObjectMapper objectMapper;
-
+/*
     @EventListener(ApplicationReadyEvent.class)
     @Async
     public void initCompletionData() {
@@ -55,7 +55,7 @@ public class ListenWordLoadService {
             log.error("Failed to load completion data: ", e);
         }
     }
-
+*/
     private void bulkSaveInChunks(List<ListenWord> list, int chunkSize) {
         for (int i = 0; i < list.size(); i += chunkSize) {
             int end = Math.min(i + chunkSize, list.size());
