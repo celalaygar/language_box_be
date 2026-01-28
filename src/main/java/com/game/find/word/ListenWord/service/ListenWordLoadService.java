@@ -35,11 +35,11 @@ public class ListenWordLoadService {
     @Async
     public void initCompletionData() {
         try {
-            log.info("Checking if sentence completion data needs to be loaded...");
+            log.info("Checking if Listen Word data needs to be loaded...");
 
             // Veritabanı doluluk kontrolü
             if (repository.count() > 0) {
-                log.info("Sentence completion database is not empty. Skipping load.");
+                log.info("Listen Word database is not empty. Skipping load.");
                 return;
             }
 
@@ -50,7 +50,7 @@ public class ListenWordLoadService {
             log.info("Loaded {} completion items from JSON. Starting bulk save...", completionList.size());
             bulkSaveInChunks(completionList, 5000);
 
-            log.info("Sentence completion data initialization completed.");
+            log.info("Listen Word data initialization completed.");
         } catch (Exception e) {
             log.error("Failed to load completion data: ", e);
         }
