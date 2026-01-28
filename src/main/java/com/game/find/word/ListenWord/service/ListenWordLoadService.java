@@ -62,7 +62,7 @@ public class ListenWordLoadService {
             List<ListenWord> chunk = list.subList(i, end);
 
             executeBulkInsert(chunk);
-            log.info("Completion Load Progress: {}/{}", end, list.size());
+            log.info("ListenWord Load Progress: {}/{}", end, list.size());
         }
     }
 
@@ -81,7 +81,7 @@ public class ListenWordLoadService {
         try {
             bulkOps.execute();
         } catch (Exception e) {
-            log.debug("Some completion items skipped (potential duplicates).");
+            log.debug("Some ListenWord items skipped (potential duplicates).");
         }
     }
 }
