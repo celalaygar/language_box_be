@@ -1,9 +1,8 @@
-package com.game.find.word.sentenceBuilder.repository;
+package com.game.find.word.SentenceBuilder.repository;
 
-import com.game.find.word.ScrambledWord.entity.Words;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
-import com.game.find.word.sentenceBuilder.entity.SentenceBuildGame;
+import com.game.find.word.SentenceBuilder.entity.SentenceBuildGame;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

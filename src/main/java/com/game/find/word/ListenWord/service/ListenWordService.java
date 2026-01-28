@@ -1,11 +1,11 @@
-package com.game.find.word.SentenceCompletion.service;
+package com.game.find.word.ListenWord.service;
 
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.game.find.word.SentenceCompletion.repository.SentenceCompletionRepository;
+import com.game.find.word.ListenWord.entity.ListenWord;
+import com.game.find.word.ListenWord.repository.ListenWordRepository;
 import com.game.find.word.base.model.BaseGameResponse;
 import com.game.find.word.base.model.EnglishLevel;
-import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
 import com.game.find.word.base.model.Language;
 import com.game.find.word.googleAI.service.GeminiService;
 import com.game.find.word.googleAI.utils.WordShuffler;
@@ -22,34 +22,33 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sample;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class SentenceCompletionService {
+public class ListenWordService {
     @Value("${app.sentence.default-count:3}")
     private int defaultCount;
     private final MongoTemplate mongoTemplate;
     private final GeminiService geminiService;
-    private final SentenceCompletionRepository sentenceCompletionRepository;
+    private final ListenWordRepository repository;
     /**
      * Cümle tamamlama oyun verilerini BaseGameResponse formatında döner.
      */
-    public BaseGameResponse<SentenceCompletion> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
+    public BaseGameResponse<ListenWord> getAllBySequenceNumber(Long sequenceNumber, Language language, EnglishLevel level) {
         log.info("Fetching completions starting from sequence: {}, language: {}, level: {}", sequenceNumber, language, level);
 
         // 1. Sayfalama ayarı (0. sayfadan başla, defaultCount kadar getir)
         Pageable limit = PageRequest.of(0, defaultCount);
 
         // 2. Belirli bir sıradan itibaren verileri getir
-        List<SentenceCompletion> completions = sentenceCompletionRepository.findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
+        List<ListenWord> completions = repository.findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
                 language,
                 level,
                 sequenceNumber,
@@ -57,19 +56,19 @@ public class SentenceCompletionService {
         );
 
         // 3. Toplam kayıt sayısını al (size alanı için)
-        long totalSize = sentenceCompletionRepository.countByLanguageAndLevel(language, level);
+        long totalSize = repository.countByLanguageAndLevel(language, level);
 
         // 4. BaseGameResponse ile sarmalayarak döndür
-        return BaseGameResponse.<SentenceCompletion>builder()
+        return BaseGameResponse.<ListenWord>builder()
                 .level(level)
                 .language(language)
                 .size( totalSize) // Toplam cümle sayısı
                 .list(completions)     // Gelen veri listesi
                 .build();
     }
-    public List<SentenceCompletion> getAndShuffleSentences(EnglishLevel level, Language language) throws JsonMappingException {
+    public List<ListenWord> getAndShuffleSentences(EnglishLevel level, Language language) throws JsonMappingException {
         // GeminiService'den cümleleri al
-        List<SentenceCompletion> sentences = geminiService.getSentenceCompletions(level, language);
+        List<ListenWord> sentences = geminiService.getListenWords(level, language);
 
         // Her bir cümlenin 'answer' kelimesini karıştır ve 'shuffledWord' değişkenine ata
         return sentences.stream()
@@ -84,22 +83,22 @@ public class SentenceCompletionService {
                 .collect(Collectors.toList());
     }
 
-    public List<SentenceCompletion> getTodaySentencesByLevel(Language language, EnglishLevel level) {
+    public List<ListenWord> getTodaySentencesByLevel(Language language, EnglishLevel level) {
         LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
         LocalDateTime endOfDay = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(999999999);
-        List<SentenceCompletion> list = sentenceCompletionRepository.findByLanguageAndLevelAndCreatedAtBetween(language, level, startOfDay, endOfDay);
-        log.info("SentenceService.getTodaySentencesByLevel " + new Date());
+        List<ListenWord> list = repository.findByLanguageAndLevelAndCreatedAtBetween(language, level, startOfDay, endOfDay);
+        log.info("ListenWordService.getTodaySentencesByLevel " + new Date());
         return list;
     }
 
-    public void saveAllSentences(List<SentenceCompletion> completions) {
+    public void saveAllSentences(List<ListenWord> completions) {
         completions.forEach(completion -> completion.setCreatedAt(LocalDateTime.now()));
-        sentenceCompletionRepository.saveAll(completions);
+        repository.saveAll(completions);
     }
 
 
 
-    public List<SentenceCompletion> getRandomSentences(Language language, EnglishLevel level, Integer count) {
+    public List<ListenWord> getRandomSentences(Language language, EnglishLevel level, Integer count) {
         if (count == null || count <= 0) {
             count = defaultCount;
         }
@@ -112,10 +111,10 @@ public class SentenceCompletionService {
         SampleOperation sampleStage = sample(count);
 
         Aggregation aggregation = newAggregation(matchStage, sampleStage);
-        List<SentenceCompletion> response = mongoTemplate.aggregate(
+        List<ListenWord> response = mongoTemplate.aggregate(
                 aggregation,
                 "sentence_completion",  // collection adı
-                SentenceCompletion.class
+                ListenWord.class
         ).getMappedResults();
         ;
         return response.stream().map(word -> {
@@ -127,31 +126,31 @@ public class SentenceCompletionService {
     }
 
 
-    public List<SentenceCompletion> findAll() {
-        return sentenceCompletionRepository.findAll();
+    public List<ListenWord> findAll() {
+        return repository.findAll();
     }
 
-    public SentenceCompletion save(SentenceCompletion sentenceCompletion) {
+    public ListenWord save(ListenWord sentenceCompletion) {
         sentenceCompletion.setCreatedAt(LocalDateTime.now());
-        return sentenceCompletionRepository.save(sentenceCompletion);
+        return repository.save(sentenceCompletion);
     }
 
-    public List<SentenceCompletion> saveAll(List<SentenceCompletion> list) {
+    public List<ListenWord> saveAll(List<ListenWord> list) {
         list = list.stream().map(item -> {
             item.setCreatedAt(LocalDateTime.now());
             return item;
         }).collect(Collectors.toList());
-        return sentenceCompletionRepository.saveAll(list);
+        return repository.saveAll(list);
     }
 
 
 
-    public Integer bulkSaveData(List<SentenceCompletion> completions) {
+    public Integer bulkSaveData(List<ListenWord> completions) {
         log.info("Starting bulk save for {} Completion List", completions.size());
 
         // 1. Veritabanında olmayan (unique) kelimeleri filtrele
-        List<SentenceCompletion> list = completions.stream()
-                .filter(w -> !sentenceCompletionRepository.existsBySentenceAndAnswerAndLanguageAndLevel(
+        List<ListenWord> list = completions.stream()
+                .filter(w -> !repository.existsBySentenceAndAnswerAndLanguageAndLevel(
                         w.getSentence(),
                         w.getAnswer(),
                         w.getLanguage(),
@@ -172,7 +171,7 @@ public class SentenceCompletionService {
         }
 
         // 2. Toplu kaydet
-        List<SentenceCompletion> savedWords = sentenceCompletionRepository.saveAll(list);
+        List<ListenWord> savedWords = repository.saveAll(list);
         log.info("Successfully saved {} new Completion List.", savedWords.size());
 
         return savedWords.size();
@@ -186,18 +185,19 @@ public class SentenceCompletionService {
             for (Language lang : Language.values()) {
                 for (EnglishLevel lvl : EnglishLevel.values()) {
 
-                    List<SentenceCompletion> list = sentenceCompletionRepository.findByLanguageAndLevel(lang, lvl);
+                    List<ListenWord> list = repository.findByLanguageAndLevel(lang, lvl);
+                    Collections.reverse(list);
 
                     if (!list.isEmpty()) {
-                        list.sort(Comparator.comparing(SentenceCompletion::getSequenceNumber,
+                        list.sort(Comparator.comparing(ListenWord::getSequenceNumber,
                                 Comparator.nullsLast(Comparator.naturalOrder())));
 
                         long counter = 1;
-                        for (SentenceCompletion completion : list) {
+                        for (ListenWord completion : list) {
                             completion.setSequenceNumber(counter++);
                         }
 
-                        sentenceCompletionRepository.saveAll(list);
+                        repository.saveAll(list);
                         log.info("Re-indexed {} completion List for Language: {} and Level: {}", list.size(), lang, lvl);
                     }
                 }

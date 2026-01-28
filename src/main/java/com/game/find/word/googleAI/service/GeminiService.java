@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.game.find.word.ListenWord.entity.ListenWord;
 import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
@@ -12,7 +13,7 @@ import com.game.find.word.googleAI.entity.ApiKey;
 import com.game.find.word.googleAI.dto.*;
 import com.game.find.word.googleAI.entity.ApiKeyType;
 import com.game.find.word.googleAI.repository.ApiKeyRepository;
-import com.game.find.word.sentenceBuilder.entity.SentenceBuildGameDto;
+import com.game.find.word.SentenceBuilder.entity.SentenceBuildGameDto;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
@@ -128,6 +129,68 @@ public class GeminiService {
     }
 
 
+    public List<ListenWord> getListenWords(EnglishLevel level, Language language) throws JsonMappingException {
+        int retryCount = 0;
+        while (retryCount < 5) {
+            try {
+                String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + getCurrentApiKey();
+
+                PromptPart promptPart = new PromptPart("Provide an array of 20 JSON objects for a sentence completion game. " +
+                        "Each object should have two keys: 'sentence' (the sentence to be completed) and 'answer' " +
+                        "(the correct word). The sentences should be in " + language.getDescription() + ", at an " + level + " (" + level.getKey() + ") level, " +
+                        "and should contain a blank marked by '____'. The answers must be only **nouns** or **adverbs**," +
+                        " with a balanced distribution of both. Only provide the JSON array, nothing else.");
+                Content content = new Content(Collections.singletonList(promptPart));
+                RequestPayload requestPayload = new RequestPayload(Collections.singletonList(content));
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+
+                HttpEntity<RequestPayload> entity = new HttpEntity<>(requestPayload, headers);
+
+                ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+
+                if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                    String responseBody = response.getBody();
+                    JsonNode rootNode = objectMapper.readTree(responseBody);
+                    JsonNode textNode = rootNode.path("candidates").path(0).path("content").path("parts").path(0).path("text");
+                    if (textNode.isMissingNode() || !textNode.isTextual()) {
+                        throw new RuntimeException("API response text is missing or not valid.");
+                    }
+                    String contentJson = textNode.asText().replace("```json\n", "").replace("\n```", "").trim();
+                    return objectMapper.readValue(contentJson, new TypeReference<List<ListenWord>>() {
+                    });
+                }
+            } catch (HttpClientErrorException.TooManyRequests e) {
+                System.err.println("Too Many Requests error GeminiService.getSentenceCompletions. Changing API key and retrying... (Attempt " + (retryCount + 1) + ")");
+                try {
+                    switchApiKey();
+                } catch (InterruptedException interruptedException) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            } catch (JsonMappingException e) {
+                System.err.println("JSON mapping error GeminiService.getSentenceCompletions. Retrying... Attempt " + (retryCount + 1) + " for " + language.name() + " and " + level.name() + ".");
+                try {
+                    Thread.sleep(8000);
+                } catch (InterruptedException interruptedException) {
+                    Thread.currentThread().interrupt();
+                    return Collections.emptyList();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Exception error GeminiService.getSentenceCompletions. Retrying... Attempt " + (retryCount + 1) + " for " + language.name() + " and " + level.name() + ".");
+                try {
+                    switchApiKey();
+                } catch (InterruptedException interruptedException) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+            retryCount++;
+        }
+        return Collections.emptyList();
+    }
     public List<SentenceBuildGameDto> getSentencesForBuildGame(EnglishLevel level, Language language) throws JsonMappingException {
         int retryCount = 0;
         while (retryCount < 5) {

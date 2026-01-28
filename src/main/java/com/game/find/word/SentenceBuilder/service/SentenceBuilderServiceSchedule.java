@@ -1,12 +1,12 @@
-package com.game.find.word.sentenceBuilder.service;
+package com.game.find.word.SentenceBuilder.service;
 
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
-import com.game.find.word.sentenceBuilder.entity.SentenceBuildGame;
-import com.game.find.word.sentenceBuilder.entity.SentenceBuildGameDto;
-import com.game.find.word.sentenceBuilder.repository.SentenceBuildGameRepository;
+import com.game.find.word.SentenceBuilder.entity.SentenceBuildGame;
+import com.game.find.word.SentenceBuilder.entity.SentenceBuildGameDto;
+import com.game.find.word.SentenceBuilder.repository.SentenceBuildGameRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

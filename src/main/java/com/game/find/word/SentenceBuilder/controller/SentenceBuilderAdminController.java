@@ -1,9 +1,9 @@
-package com.game.find.word.SentenceCompletion.controller;
+package com.game.find.word.SentenceBuilder.controller;
 
 
-import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
-import com.game.find.word.SentenceCompletion.service.SentenceCompletionService;
 import com.game.find.word.base.util.ApiPaths;
+import com.game.find.word.SentenceBuilder.entity.SentenceBuildGame;
+import com.game.find.word.SentenceBuilder.service.SentenceBuilderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(ApiPaths.SentenceAdminCtrl.CTRL)
+@RequestMapping(ApiPaths.SentenceBuilderAdminCtrl.CTRL)
 @RequiredArgsConstructor
-public class SentenceAdminController {
+public class SentenceBuilderAdminController {
 
-    private final SentenceCompletionService service;
-
+    private final SentenceBuilderService service;
 
     @PostMapping("/bulkSaveData")
     @Operation(
@@ -27,7 +26,7 @@ public class SentenceAdminController {
                     @ApiResponse(responseCode = "200", description = "Successful retrieval")
             }
     )
-    public Integer bulkSaveWords(@RequestBody List<SentenceCompletion> list) {
+    public Integer bulkSaveWords(@RequestBody List<SentenceBuildGame> list) {
         return service.bulkSaveData(list);
     }
 

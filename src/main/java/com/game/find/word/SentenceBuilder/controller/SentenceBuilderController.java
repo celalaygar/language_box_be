@@ -1,12 +1,11 @@
-package com.game.find.word.sentenceBuilder.controller;
+package com.game.find.word.SentenceBuilder.controller;
 
 
-import com.game.find.word.ScrambledWord.entity.Words;
 import com.game.find.word.base.model.BaseGameResponse;
 import com.game.find.word.base.util.ApiPaths;
 import com.game.find.word.ScrambledWord.dto.WordPageRequestDto;
-import com.game.find.word.sentenceBuilder.entity.SentenceBuildGame;
-import com.game.find.word.sentenceBuilder.service.SentenceBuilderService;
+import com.game.find.word.SentenceBuilder.entity.SentenceBuildGame;
+import com.game.find.word.SentenceBuilder.service.SentenceBuilderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;

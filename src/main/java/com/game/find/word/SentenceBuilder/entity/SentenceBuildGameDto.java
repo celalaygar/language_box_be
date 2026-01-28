@@ -1,4 +1,4 @@
-package com.game.find.word.sentenceBuilder.entity;
+package com.game.find.word.SentenceBuilder.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

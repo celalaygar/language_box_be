@@ -11,6 +11,7 @@ public class ApiPaths {
     private static final String VERSION_PATH = "/version";
     private static final String MATCH_SENTENCE_PATH = "/match-sentence";
     private static final String GRID_CHALLANGE_PATH = "/grid-challange";
+    private static final String LIST_WORD_PATH = "/list-word";
 
     public static final class GridChallangeCtrl {
         public static final String CTRL = BASE_PATH_V1 + GRID_CHALLANGE_PATH;
@@ -39,6 +40,16 @@ public class ApiPaths {
         public static final String CTRL = BASE_PATH_V1 + FIND_WORD_PATH;
     }
 
+    public static final class ScrambledWordAdminCtrl {
+        public static final String CTRL = BASE_PATH_V1 + ADMIN_PATH + FIND_WORD_PATH;
+    }
+    public static final class ListenWordCtrl {
+        public static final String CTRL = BASE_PATH_V1 + LIST_WORD_PATH;
+    }
+
+    public static final class ListenWordAdminCtrl {
+        public static final String CTRL = BASE_PATH_V1 + ADMIN_PATH + LIST_WORD_PATH;
+    }
     public static final class KeywordQuizCtrl {
         public static final String CTRL = BASE_PATH_V1 + KEYWORD_QUIZ_PATH;
     }
@@ -47,9 +58,6 @@ public class ApiPaths {
         public static final String CTRL = BASE_PATH_V1 + ADMIN_PATH + KEYWORD_QUIZ_PATH;
     }
 
-    public static final class ScrambledWordAdminCtrl {
-        public static final String CTRL = BASE_PATH_V1 + ADMIN_PATH + FIND_WORD_PATH;
-    }
     public static final class SentenceCtrl {
         public static final String CTRL = BASE_PATH_V1 + SENTENCE_PATH;
     }

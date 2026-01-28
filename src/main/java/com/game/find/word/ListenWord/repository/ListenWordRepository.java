@@ -1,7 +1,7 @@
-package com.game.find.word.SentenceCompletion.repository;
+package com.game.find.word.ListenWord.repository;
 
 
-import com.game.find.word.SentenceCompletion.entity.SentenceCompletion;
+import com.game.find.word.ListenWord.entity.ListenWord;
 import com.game.find.word.base.model.EnglishLevel;
 import com.game.find.word.base.model.Language;
 import org.springframework.data.domain.Pageable;
@@ -12,17 +12,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface SentenceCompletionRepository extends MongoRepository<SentenceCompletion, String> {
-    List<SentenceCompletion> findByLanguageAndLevelAndCreatedAtBetween(
+public interface ListenWordRepository extends MongoRepository<ListenWord, String> {
+    List<ListenWord> findByLanguageAndLevelAndCreatedAtBetween(
             Language language,
             EnglishLevel level,
             LocalDateTime startOfDay,
             LocalDateTime endOfDay);
 
-    List<SentenceCompletion> findByLanguageAndLevel( Language language, EnglishLevel level);
+    List<ListenWord> findByLanguageAndLevel(Language language, EnglishLevel level);
     // sequenceNumber >= startSeq kriterine uyan,
     // dile ve seviyeye göre filtrelenmiş verileri getirir.
-    List<SentenceCompletion> findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
+    List<ListenWord> findByLanguageAndLevelAndSequenceNumberGreaterThanEqualOrderBySequenceNumberAsc(
             Language language,
             EnglishLevel level,
             Long startSeq,

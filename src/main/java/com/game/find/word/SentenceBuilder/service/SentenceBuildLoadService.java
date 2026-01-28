@@ -1,7 +1,7 @@
-package com.game.find.word.sentenceBuilder.service;
+package com.game.find.word.SentenceBuilder.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.game.find.word.sentenceBuilder.entity.SentenceBuildGame;
-import com.game.find.word.sentenceBuilder.repository.SentenceBuildGameRepository;
+import com.game.find.word.SentenceBuilder.entity.SentenceBuildGame;
+import com.game.find.word.SentenceBuilder.repository.SentenceBuildGameRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.BulkOperations;
