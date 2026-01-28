@@ -11,7 +11,7 @@ public class ApiPaths {
     private static final String VERSION_PATH = "/version";
     private static final String MATCH_SENTENCE_PATH = "/match-sentence";
     private static final String GRID_CHALLANGE_PATH = "/grid-challange";
-    private static final String LIST_WORD_PATH = "/list-word";
+    private static final String LIST_WORD_PATH = "/listen-word";
 
     public static final class GridChallangeCtrl {
         public static final String CTRL = BASE_PATH_V1 + GRID_CHALLANGE_PATH;
